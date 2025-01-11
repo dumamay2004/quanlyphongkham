@@ -18,10 +18,10 @@ CREATE TABLE QUANLY
 CREATE TABLE BENHNHAN
 (
 	maBN int identity(1,1),
-	soBH int,
+	soBH int UNIQUE,
 	gioitinh varchar(10),
 	hoten varchar(225),
-	sodienthoai nvarchar(10),
+	sodienthoai varchar(10),
 	matkhau varchar(20) ,
 	email nvarchar(225) ,
 	quanhuyen varchar (50),
@@ -32,18 +32,18 @@ CREATE TABLE BENHNHAN
  CREATE TABLE CHUYENKHOA
  (
 	maCK nvarchar(10) primary key,
-	tenCK nvarchar(50),
+	tenCK nvarchar(50) NOT NULL,
 	soluong int
 )
  CREATE TABLE BACSI
  ( 
 maBS VARCHAR(5),
-hotenBS varchar(225),
-dicchi varchar(100),
-SDT Varchar(20),
-email nvarchar(225),
-chuyenkhoa nvarchar(10),
-chucvu varchar(50),
+hotenBS varchar(225) NOT NULL,
+diachi varchar(100) NOT NULL,
+SDT Varchar(20) NOT NULL,
+email nvarchar(225) NOT NULL,
+chuyenkhoa nvarchar(10) NOT NULL,
+chucvu varchar(50) NOT NULL,
 vaitro varchar(10) not null,
 hinh nvarchar(100),
 primary key(maBS),
@@ -54,21 +54,32 @@ foreign key (vaitro) REFERENCES VAITRO(maVT)
  CREATE TABLE BENHAN
  (
 	maBA varchar(5),
-    tenBa varchar(100),
-    ngayBD DATE,
-    ngayKT DATE,
-    chuandoan varchar(100),
-    MABN int,
-    MABS VARCHAR(5),
+    tenBa varchar(100) NOT NULL,
+    ngayBD DATE NOT NULL,
+    ngayKT DATE NOT NULL,
+    chuandoan varchar(100) NOT NULL,
+    MABN int NOT NULL,
+    MABS VARCHAR(5) NOT NULL,
     primary key(maBA),
     FOREIGN KEY (MABN)REFERENCES BENHNHAN(MABN),
     FOREIGN KEY (MABS)REFERENCES BACSI(MABS)
  )
+ CREATE TABLE LIENHE
+ (
+	id int identity(1,1) primary key,
+	email nvarchar(225) not null,
+	SDT varchar(10) not null,
+	noidung nvarchar(300) not null,
+	ngayLH datetime default getdate(),
+	maBN int
+	foreign key(maBN) references BENHNHAN(maBN)
+ )
  CREATE TABLE HOADON
  (
-	mahd varchar(5),
+	mahd int identity(1,1),
     phiPS decimal,
     tamung decimal,
+	tong decimal,
     ngaylap date,
     maBA varchar(5),
     primary key(maHD),
@@ -77,9 +88,9 @@ foreign key (vaitro) REFERENCES VAITRO(maVT)
  CREATE TABLE DONTHUOC
  (
 	madt varchar(5),
-    tendt varchar(100),
-    ngaylap date,
-    mahd varchar(5),
+    tendt varchar(100)not null ,
+    ngaylap datetime default getdate(),
+    mahd int,
     primary key(madt),
     foreign key(mahd)references hoadon(mahd)
  )
@@ -110,14 +121,43 @@ foreign key (vaitro) REFERENCES VAITRO(maVT)
  CREATE TABLE CHITIETDV
  (
 	maDV varchar(5),
-    mahd varchar(5),
+    mahd int,
     primary key(madv,mahd),
     gia decimal,
     soluong int,
     foreign key(madv)references dichvu(madv),
     foreign key(mahd)references hoadon(mahd)
  )
- 
+ CREATE TABLE LICHKHAM
+(
+    maLK int identity(1,1) primary key, -- Mã lịch khám tự động tăng
+    ngayKham date not null,             -- Ngày khám
+    gioKham time not null,              -- Giờ khám
+    maBN int not null,                  -- Mã bệnh nhân
+    maBS varchar(5) not null,           -- Mã bác sĩ
+    maCK nvarchar(10) not null,         -- Mã chuyên khoa
+    trangthai nvarchar(50) default N'Chờ xác nhận', -- Trạng thái lịch hẹn
+    ghiChu nvarchar(255),              -- Ghi chú nếu cần
+    maDV varchar(5),                   -- Mã dịch vụ
+    FOREIGN KEY (maBN) REFERENCES BENHNHAN(maBN),
+    FOREIGN KEY (maBS) REFERENCES BACSI(maBS),
+    FOREIGN KEY (maCK) REFERENCES CHUYENKHOA(maCK),
+    FOREIGN KEY (maDV) REFERENCES DICHVU(maDV)
+);
+
+CREATE TABLE THANHTOAN
+(
+    maTT int identity(1,1) primary key,   -- Mã thanh toán (tự động tăng)
+    maLK int not null,                   -- Mã lịch khám (liên kết với lịch khám)
+	mahd int not null,
+    ngayTT datetime default getdate(),   -- Ngày thanh toán
+    hinhThuc nvarchar(50) not null,      -- Hình thức thanh toán (tiền mặt, chuyển khoản, thẻ)
+    soTien decimal(10,2) not null,       -- Số tiền thanh toán
+    trangThai nvarchar(50) default N'Chưa thanh toán', -- Trạng thái (Chưa thanh toán, Đã thanh toán)
+    FOREIGN KEY (maLK) REFERENCES LICHKHAM(maLK),
+	FOREIGN KEY (mahd) REFERENCES HOADON(mahd)
+)
+
  INSERT INTO BENHNHAN(MABN,SOBH,GIOITINH,HOTENLOTBN,TENBN,QUANHUYEN,TINH_TP)
  VALUES
 ('BN01',001,'NỮ','TRÂN THI','HOA','PHƯỜNG LONG TRƯỜNG QUẬN THỦ ĐƯC','TP.HCM'),
