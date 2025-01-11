@@ -15,20 +15,23 @@ CREATE TABLE QUANLY
 	hinh nvarchar(100),
 	foreign key (vaitro) REFERENCES VAITRO(maVT)
 )
+select * from benhnhan
 CREATE TABLE BENHNHAN
 (
 	maBN int identity(1,1),
-	soBH int UNIQUE,
+	soBH int ,
 	gioitinh varchar(10),
 	hoten varchar(225),
 	sodienthoai varchar(10),
-	matkhau varchar(20) ,
+	matkhau varchar(225) ,
 	email nvarchar(225) ,
 	quanhuyen varchar (50),
 	tinh_tp varchar (100),
 	hinh nvarchar(100),
 	primary key(mabn)
 )
+ALTER TABLE BENHNHAN
+ALTER COLUMN soBH int null;
  CREATE TABLE CHUYENKHOA
  (
 	maCK nvarchar(10) primary key,

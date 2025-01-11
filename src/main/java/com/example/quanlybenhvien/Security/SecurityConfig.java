@@ -27,13 +27,18 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/dangky","/dangky/**", "/login", "/css/**", "/js/**", "/images/**","/image/**", "/index").permitAll()
+                        .requestMatchers("/dangky", "/dangky/**", "/login", "/css/**", "/js/**", "/images/**",
+                                "/image/**", "/index")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
                         .defaultSuccessUrl("/loginSuccess", true)
                         .authorizationEndpoint(auth -> auth
                                 .authorizationRequestResolver(customAuthorizationRequestResolver())))
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/login", true))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {

@@ -24,4 +24,6 @@ public class BenhNhan {
     String quanhuyen ;
     String tinh_tp ;
     String hinh;
+    @Transient
+    private String nhapLaiMatKhau;
 }

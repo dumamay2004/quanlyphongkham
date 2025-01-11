@@ -1,10 +1,9 @@
-/* Top Info Bar */
+Top Info Bar
 .info-bar {
     background-color: #f8f9fa;
     font-size: 14px;
     color: #6c757d;
 }
-
 .contact-info div {
     display: flex;
     align-items: center;
