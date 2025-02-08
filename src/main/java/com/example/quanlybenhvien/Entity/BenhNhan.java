@@ -20,6 +20,7 @@ public class BenhNhan {
     String hoten ;
     String sodienthoai ;
     String matkhau ;
+    @Column(unique = true)
     String email ;
     String quanhuyen ;
     String tinh_tp ;

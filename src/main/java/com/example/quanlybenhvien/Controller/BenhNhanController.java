@@ -5,6 +5,9 @@ import com.example.quanlybenhvien.Entity.BenhNhan;
 import com.example.quanlybenhvien.Service.BenhNhanService;
 
 import jakarta.servlet.http.HttpSession;
+
+import java.util.LinkedHashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,12 +27,14 @@ public class BenhNhanController {
     private BenhNhanService benhNhanService;
 
     @GetMapping("/index")
-    public String index() {
+    public String index(Model model, HttpSession session) {
+        BenhNhan benhNhan = (BenhNhan) session.getAttribute("user");
+        model.addAttribute("user", benhNhan);
         return "index";
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
         return "login";
     }
 
@@ -58,11 +63,23 @@ public class BenhNhanController {
     }
 
     @GetMapping("/loginSuccess")
-    public String loginSuccess(@AuthenticationPrincipal OAuth2User principal, Model model) {
-        // Lấy thông tin từ Google OAuth2User
+    public String loginSuccess(@AuthenticationPrincipal OAuth2User principal, Model model, HttpSession session) {
+        // Lấy thông tin từ OAuth2User
         String email = principal.getAttribute("email");
         String name = principal.getAttribute("name");
-        String picture = principal.getAttribute("picture");
+        String picture = null;
+
+        // Kiểm tra và xử lý trường "picture"
+        Object pictureAttribute = principal.getAttribute("picture");
+        if (pictureAttribute instanceof String) {
+            // Google trả về URL dạng chuỗi
+            picture = (String) pictureAttribute;
+        } else if (pictureAttribute instanceof LinkedHashMap) {
+            // Facebook trả về đối tượng chứa URL
+            LinkedHashMap<String, Object> pictureMap = (LinkedHashMap<String, Object>) pictureAttribute;
+            LinkedHashMap<String, String> data = (LinkedHashMap<String, String>) pictureMap.get("data");
+            picture = data.get("url");
+        }
 
         // Kiểm tra người dùng trong cơ sở dữ liệu
         BenhNhan user = benhNhanDao.findBenhNhanByEmail(email).orElse(null);
@@ -72,10 +89,11 @@ public class BenhNhanController {
             user = new BenhNhan();
             user.setEmail(email);
             user.setHoten(name);
-            user.setHinh(picture);
+            user.setHinh(picture); // Lưu URL hình ảnh
             benhNhanDao.save(user);
         }
-
+        // Lưu thông tin người dùng vào session
+        session.setAttribute("loggedInUser", user);
         // Thêm thông tin người dùng vào model để hiển thị
         model.addAttribute("user", user);
         return "index";
@@ -104,4 +122,5 @@ public class BenhNhanController {
             return "dangky"; // Trả về lại trang đăng ký
         }
     }
+
 }

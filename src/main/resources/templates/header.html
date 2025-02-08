@@ -32,7 +32,9 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light py-3">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <h3 class="logo-icon bg-success text-white rounded-circle d-flex justify-content-center align-items-center">H</h3>
+                <h3
+                    class="logo-icon bg-success text-white rounded-circle d-flex justify-content-center align-items-center">
+                    H</h3>
                 <h3 class="ms-2">Health Center</h3>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -83,21 +85,26 @@
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false" th:text="${user != null ? user.hoten : 'Tài khoản'}">
                         </a>
-                        
+
                         <ul class="dropdown-menu">
                             <li th:if="${user == null}"><a class="dropdown-item" href="/login">Đăng nhập</a></li>
                             <li th:if="${user != null}"><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li th:if="${user != null}"><a class="dropdown-item" href="#">Hồ sơ</a></li>
+                            <li th:if="${user != null}"><!-- Liên kết đến trang cập nhật thông tin người dùng -->
+                                <a th:href="@{/benhnhan/edit/{maBN}(maBN=${user.maBN})}" class="btn ">Chỉnh sửa
+                                    thông tin</a>
+                            </li>
                             <li th:if="${user == null}"><a class="dropdown-item" href="/dangky">Đăng Ký</a></li>
                         </ul>
                     </li>
                     <li th:if="${user != null}" class="nav-item">
-                        <img th:src="@{${user.hinh != null ? user.hinh : '/images/default-avatar.png'}}" alt="User Image" class="dropdown-item" style="width: 40px; height: 40px; border-radius: 50%;">
+                        <img th:src="@{${user.hinh != null ? user.hinh : '/images/default-avatar.png'}}"
+                            alt="User Image" class="dropdown-item"
+                            style="width: 40px; height: 40px; border-radius: 50%;">
                     </li>
-                    
+
                 </ul>
 
             </div>

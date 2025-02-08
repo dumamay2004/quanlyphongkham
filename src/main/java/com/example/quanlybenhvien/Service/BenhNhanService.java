@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import com.example.quanlybenhvien.Dao.BenhNhanDao;
 import com.example.quanlybenhvien.Entity.BenhNhan;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class BenhNhanService {
     
@@ -48,5 +50,30 @@ public class BenhNhanService {
         }
 
         return "Đăng ký thành công!";
+    }
+
+     public BenhNhan findById(Integer id) {
+        return benhNhanDao.findById(id).orElse(null);
+    }
+
+    // Cập nhật bệnh nhân
+    public BenhNhan updateBenhNhan(Integer id, BenhNhan benhNhan) {
+        // Kiểm tra xem bệnh nhân có tồn tại không
+        BenhNhan existingBenhNhan = benhNhanDao.findById(id).orElseThrow(() -> new EntityNotFoundException("Bệnh nhân không tồn tại"));
+
+        // Cập nhật các trường dữ liệu
+        existingBenhNhan.setHoten(benhNhan.getHoten());
+        existingBenhNhan.setEmail(benhNhan.getEmail());
+        existingBenhNhan.setGioitinh(benhNhan.getGioitinh());
+        existingBenhNhan.setSodienthoai(benhNhan.getSodienthoai());
+        existingBenhNhan.setQuanhuyen(benhNhan.getQuanhuyen());
+        existingBenhNhan.setTinh_tp(benhNhan.getTinh_tp());
+
+        // Lưu lại bản ghi đã cập nhật
+        return benhNhanDao.save(existingBenhNhan);
+    }
+    public void deleteBenhNhan(Integer id)
+    {
+        benhNhanDao.deleteById(id);
     }
 }
