@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa thông tin bệnh nhân</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" 
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+    <th:block th:replace="header :: header"></th:block>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-header">
+                        Cập nhật thông tin bệnh nhân
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Vui lòng nhập đầy đủ thông tin cá nhân</h5>
+
+                        <!-- Hiển thị thông báo thành công -->
+                        <div th:if="${message}" class="alert alert-success mt-3" th:text="${message}"></div>
+
+                        <!-- Form cập nhật thông tin -->
+                        <form th:action="@{/benhnhan/update/{maBN}(maBN=${benhnhan.maBN})}" th:object="${benhnhan}" method="post">
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" th:field="*{email}" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="hoten" class="form-label">Họ và tên</label>
+                                <input type="text" class="form-control" id="hoten" th:field="*{hoten}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="gioitinh" class="form-label">Giới tính</label>
+                                <select class="form-select" id="gioitinh" th:field="*{gioitinh}">
+                                    <option value="Male" th:selected="*{gioitinh} == 'Male'">Nam</option>
+                                    <option value="Female" th:selected="*{gioitinh} == 'Female'">Nữ</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="sodienthoai" class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" id="sodienthoai" th:field="*{sodienthoai}">
+                            </div>
+                           
+                            <div class="mb-3">
+                                <label for="tinh_tp" class="form-label">Tỉnh / Thành phố</label>
+                                <input type="text" class="form-control" id="tinh_tp" th:field="*{tinh_tp}">
+                            </div>
+                            <div class="mb-3">
+                                <label for="quanhuyen" class="form-label">Quận / Huyện</label>
+                                <input type="text" class="form-control" id="quanhuyen" th:field="*{quanhuyen}">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
