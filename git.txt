@@ -1,0 +1,1 @@
+Lệnh xóa cache cũ: cmdkey /delete:git:https://github.com
