@@ -7,7 +7,8 @@ CREATE TABLE VAITRO
 )
 insert into vaitro(maVT, tenVT)
 values
-('ql',N'Quản Lý')
+('QUANLY',N'Quản Lý')
+
 CREATE TABLE NGUOIDUNG
 (
 	maND varchar(5) primary key,
@@ -18,7 +19,16 @@ CREATE TABLE NGUOIDUNG
 	hinh nvarchar(100),
 	foreign key (vaitro) REFERENCES VAITRO(maVT)
 )
-select * from benhnhan
+ALTER TABLE NGUOIDUNG
+ALTER COLUMN matkhau varchar(225);
+INSERT INTO NGUOIDUNG (maND, hoten, matkhau, email, vaitro, hinh)
+VALUES ('ND001', N'Nguyễn Văn A', '123', N'a@gmail.com', 'QUANLY', 'avatar.jpg');
+UPDATE NGUOIDUNG
+SET matkhau = '$2a$10$7JTC9E7TJvFurTHGUyX0s.0GCyd43Tl/aHcIdIRr23hFZalMr8she' -- Thay bằng chuỗi mã hóa của bạn
+WHERE email = 'a@gmail.com';
+SELECT matkhau FROM NGUOIDUNG WHERE email = 'a@gmail.com';
+
+select * from BENHNHAN
 CREATE TABLE BENHNHAN
 (
 	maBN int identity(1,1),

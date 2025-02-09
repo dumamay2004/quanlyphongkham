@@ -3,9 +3,10 @@ package com.example.quanlybenhvien.Security;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
@@ -14,11 +15,14 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequ
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
+@Order(2)
 public class SecurityConfig {
     private final ClientRegistrationRepository clientRegistrationRepository;
-
-    public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository) {
+    private final PasswordEncoder passwordEncoder;
+    public SecurityConfig(ClientRegistrationRepository clientRegistrationRepository, PasswordEncoder passwordEncoder) {
         this.clientRegistrationRepository = clientRegistrationRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Bean
@@ -26,7 +30,6 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/dangky", "/index", "/login", "/css/**", "/js/**", "/images/**").permitAll()
-                        .requestMatchers("/quanly/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login") // Trang đăng nhập chung
@@ -86,10 +89,5 @@ public class SecurityConfig {
                         .build();
             }
         };
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
