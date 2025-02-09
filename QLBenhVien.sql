@@ -5,9 +5,12 @@ CREATE TABLE VAITRO
 	maVT varchar(10) primary key,
 	tenVT nvarchar(30) not null
 )
-CREATE TABLE QUANLY
+insert into vaitro(maVT, tenVT)
+values
+('ql',N'Quản Lý')
+CREATE TABLE NGUOIDUNG
 (
-	maQL varchar(5) primary key,
+	maND varchar(5) primary key,
 	hoten nvarchar(225) not null,
 	matkhau varchar(20) not null,
 	email nvarchar(225) not null,
@@ -49,6 +52,7 @@ hotenBS varchar(225) NOT NULL,
 diachi varchar(100) NOT NULL,
 SDT Varchar(20) NOT NULL,
 email nvarchar(225) NOT NULL,
+matkhau varchar(20) not null,
 chuyenkhoa nvarchar(10) NOT NULL,
 chucvu varchar(50) NOT NULL,
 vaitro varchar(10) not null,
@@ -164,7 +168,7 @@ CREATE TABLE THANHTOAN
     FOREIGN KEY (maLK) REFERENCES LICHKHAM(maLK),
 	FOREIGN KEY (mahd) REFERENCES HOADON(mahd)
 )
-
+/*
  INSERT INTO BENHNHAN(MABN,SOBH,GIOITINH,HOTENLOTBN,TENBN,QUANHUYEN,TINH_TP)
  VALUES
 ('BN01',001,'NỮ','TRÂN THI','HOA','PHƯỜNG LONG TRƯỜNG QUẬN THỦ ĐƯC','TP.HCM'),

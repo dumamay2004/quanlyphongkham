@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class BenhNhanController {
+public class LoginController {
     @Autowired
     private BenhNhanDao benhNhanDao;
 
