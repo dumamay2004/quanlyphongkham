@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/dangky", "/index", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/dangky", "/index", "/login", "/css/**", "/js/**", "/images/**","/api/vaitro").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login") // Trang đăng nhập chung

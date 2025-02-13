@@ -28,7 +28,7 @@ SET matkhau = '$2a$10$7JTC9E7TJvFurTHGUyX0s.0GCyd43Tl/aHcIdIRr23hFZalMr8she' -- 
 WHERE email = 'a@gmail.com';
 SELECT matkhau FROM NGUOIDUNG WHERE email = 'a@gmail.com';
 
-select * from BENHNHAN
+select * from NGUOIDUNG
 CREATE TABLE BENHNHAN
 (
 	maBN int identity(1,1),

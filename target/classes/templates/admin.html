@@ -1,386 +1,70 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ADMIN</title>
     <link rel="shortcut icon" href="https://idodesign.vn/wp-content/uploads/2023/08/mau-thiet-ke-logo-nha-thuoc-dep-6.jpg" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
 
+        .sidebar {
+            width: 250px;
+            height: 100vh;
+            background: #4A90E2;
+            padding-top: 10px;
+            position: fixed;
+        }
+
+        .nav-link {
+            color: white;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: #4178C5;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+        }
+    </style>
 </head>
-<style>
-    #alo {
-    margin-top: 80px; /* Đẩy phần nội dung xuống dưới một chút */
-    }
-    body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-}
 
-.sidebar {
-    width: 250px;
-    height: 100vh;
-    background: #4A90E2;
-    padding-top: 10px;
-    position: fixed;
-}
-
-.nav {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.nav-item {
-    padding: 12px 20px;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-}
-
-.nav-item:hover {
-    background: #4178C5;
-}
-</style>
 <body>
-    <!--  style="background: linear-gradient(to right, #24e7ee53, #3692d850, #4c36dd50, #a045b453);" -->
-    <nav class="navbar  p-1 fixed-top" style="background-color: rgb(197, 197, 197);" >
-        <a class="navbar-brand" href="#"><h1>ADMIN - - - - - - - - - - - - -<b>CÔNG TY CỔ PHẦN NHÓM 2</b>- - - - - - - - - - - - -</h1></a>
-        <button type="button" class="btn btn-outline-danger">Đăng Xuất</button>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">ADMIN - CÔNG TY CỔ PHẦN NHÓM 2</a>
+            <button class="btn btn-outline-danger">Đăng Xuất</button>
+        </div>
     </nav>
-    <div class="container-fluid" id="alo">
+
+    <div class="container-fluid mt-5">
         <div class="row">
-            <nav class="sidebar">
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar">
                 <ul class="nav flex-column">
-                    <li class="nav-item" onclick="showTable('quanli')"><b>Quản Lí</b></li>
-                    <li class="nav-item" onclick="showTable('benhnhan')"><b>Bệnh Nhân</b></li>
-                    <li class="nav-item" onclick="showTable('chuyenkhoa')"><b>Chuyên Khoa</b></li>
-                    <li class="nav-item" onclick="showTable('bacsi')"><b>Bác Sĩ</b></li>
-                    <li class="nav-item" onclick="showTable('benhan')"><b>Bệnh Án</b></li>
-                    <li class="nav-item" onclick="showTable('hoadon')"><b>Hóa Đơn</b></li>
-                    <li class="nav-item" onclick="showTable('donthuoc')"><b>Đơn Thuốc</b></li>
-                    <li class="nav-item" onclick="showTable('thuoc')"><b>Thuốc</b></li>
-                    <li class="nav-item" onclick="showTable('ctthuoc')"><b>CT Thuốc</b></li>
-                    <li class="nav-item" onclick="showTable('dichvu')"><b>Dịch Vụ</b></li>
-                    <li class="nav-item" onclick="showTable('ctdichvu')"><b>CT Dịch Vụ</b></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/nguoidung/trangchu/vaitro}">Vai Trò</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/nguoidung/trangchu/quanli}">Quản Lí</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/nguoidung/trangchu/benhnhan}">Bệnh Nhân</a></li>
                 </ul>
-            </nav>            
-            <main class="col-md-10 ms-sm-auto p-4">
-                <div id="quanli" class="table-container" >
-                    <h3>Quản Lí</h3>
-                    <table class="table table-bordered;table table-hover" id="example">
-                        <thead>
-                            <tr>
-                                <th>Mã QL</th>
-                                <th>Họ Và Tên</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>ql01</td>
-                                <td>Phạm Thanh Giàu</td>
-                            </tr>
-                            <tr>
-                                <td>ql02</td>
-                                <td>Duy Tân</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div id="benhnhan" class="table-container"style="display:none;">
-                    <h3>Bệnh Nhân</h3>
-                    <table class="table table-bordered;table table-hover" id="example2">
-                        <thead>
-                            <tr>
-                                <th>Mã BN</th>
-                                <th>Số Bảo Hiểm</th>
-                                <th>Giới Tính</th>
-                                <th>Họ Và Tên</th>
-                                <th>Số Điện Thoại</th>
-                                <th>Quận, Huyện</th>
-                                <th>Tỉnh, Thành Phố</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>12222222222</td>
-                                <td>Nữ</td>
-                                <td>Võ Nguyễn Duy Tân</td>
-                                <td>0123456789</td>
-                                <td>Bình Chánh</td>
-                                <td>TP Hồ Chí Minh</td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>13333333333</td>
-                                <td>Nam</td>
-                                <td>Phạm Thanh Giàu</td>
-                                <td>09365350702</td>
-                                <td>Quân 12</td>
-                                <td>TP Hồ Chí Minh</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <div id="chuyenkhoa" class="table-container" style="display:none;">
-                    <h3>Chuyên Khoa</h3>
-                    <table class="table table-bordered;table table-hover" id="example3">
-                        <thead>
-                            <tr>
-                                <th>Mã CK</th>
-                                <th>Tên CK</th>
-                                <th>Số Lượng</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>Khoa Trĩ</td>
-                                <td>1</td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>Phụ Khoa</td>
-                                <td>2</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            </nav>
+            
+            <main class="col-md-9 ms-sm-auto px-md-4">
+               
+                <div th:replace="~{vaitro :: vaitro}"></div>
 
-                <div id="bacsi" class="table-container" style="display:none;">
-                    <h3>Bác Sĩ</h3>
-                    <table class="table table-bordered;table table-hover" id="example4">
-                        <thead>
-                            <tr>
-                                <th>Mã BS</th>
-                                <th>Họ Và Tên</th>
-                                <th>Địa Chỉ</th>
-                                <th>Số Điện Thoại</th>
-                                <th>Chuyên Khoa</th>
-                                <th>Chức Vụ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>Nguyễn Thị Bướm</td>
-                                <td>HCM</td>
-                                <td>0123456789</td>
-                                <td>Phụ Khoa</td>
-                                <td>Trưởng Phụ Khoa</td>
-                            </tr>
-                            <tr>
-                                <td>002</td>
-                                <td>Nguyễn Văn Chim</td>
-                                <td>HCM</td>
-                                <td>0123456789</td>
-                                <td>Khoa Trĩ</td>
-                                <td>Trưởng Khoa Trĩ</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="benhan" class="table-container" style="display:none;">
-                    <h3>Bệnh Án</h3>
-                    <table class="table table-bordered;table table-hover" id="example5">
-                        <thead>
-                            <tr>
-                                <th>Mã BA</th>
-                                <th>Tên BA</th>
-                                <th>Ngày Star</th>
-                                <th>Ngày End</th>
-                                <th>Chuẩn Đoán</th>
-                                <th>Mã BN</th>
-                                <th>Mã BS</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>Trĩ</td>
-                                <td>1/1/2025</td>
-                                <td>2/1/2025</td>
-                                <td>Trĩ Nặng</td>
-                                <td>001</td>
-                                <td>001</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="hoadon" class="table-container" style="display:none;">
-                    <h3>Hóa Đơn</h3>
-                    <table class="table table-bordered;table table-hover" id="example6">
-                        <thead>
-                            <tr>
-                                <th>Mã HĐ</th>
-                                <th>Phí Phát Sinh</th>
-                                <th>Tạm Ứng</th>
-                                <th>Ngày Lập</th>
-                                <th>Mã BA</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>1tr</td>
-                                <td>1tr</td>
-                                <td>2/1/2025</td>
-                                <td>001</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="donthuoc" class="table-container" style="display:none;">
-                    <h3>Đơn Thuốc</h3>
-                    <table class="table table-bordered;table table-hover" id="example7">
-                        <thead>
-                            <tr>
-                                <th>Mã ĐT</th>
-                                <th>Tên ĐT</th>
-                                <th>Ngày Lập</th>
-                                <th>Mã HĐ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>Thuốc Trị Trĩ</td>
-                                <td>2/1/2025</td>
-                                <td>001</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="thuoc" class="table-container" style="display:none;">
-                    <h3>Thuốc</h3>
-                    <table class="table table-bordered;table table-hover" id="example8">
-                        <thead>
-                            <tr>
-                                <th>Mã Thuốc</th>
-                                <th>Tên Thuốc</th>
-                                <th>Giá Thuốc</th>
-                                <th>Ghi Chú</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>Thuốc trị Trĩ nặng</td>
-                                <td>1tr</td>
-                                <td>Dùng nhiều quá bị rách đít</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="ctthuoc" class="table-container" style="display:none;">
-                    <h3>Chi Tiết Thuốc</h3>
-                    <table class="table table-bordered;table table-hover" id="example9">
-                        <thead>
-                            <tr>
-                                <th>Mã ĐT</th>
-                                <th>Mã Thuốc</th>
-                                <th>Số Lượng</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>001</td>
-                                <td>100</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="dichvu" class="table-container" style="display:none;">
-                    <h3>Dịch Vụ</h3>
-                    <table class="table table-bordered;table table-hover" id="example10">
-                        <thead>
-                            <tr>
-                                <th>Mã DV</th>
-                                <th>Tên DV</th>
-                                <th>Loại DV</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>Rửa đít, cắt trĩ</td>
-                                <td>Dịch vụ dơ</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div id="ctdichvu" class="table-container" style="display:none;">
-                    <h3>Chi Tiết Dịch Vụ</h3>
-                    <table class="table table-bordered;table table-hover" id="example11">
-                        <thead>
-                            <tr>
-                                <th>Mã DV</th>
-                                <th>Mã HĐ</th>
-                                <th>Giá</th>
-                                <th>Số Lượng</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>001</td>
-                                <td>001</td>
-                                <td>1tr</td>
-                                <td>1</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </main>
         </div>
     </div>
-    <script>
-        function showTable(tableId) {
-            document.querySelectorAll('.table-container').forEach(table => {
-                table.style.display = 'none';
-            });
-            document.getElementById(tableId).style.display = 'block';
-        }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
-    <script>
-        new DataTable('#example');
-        new DataTable('#example2');
-        new DataTable('#example3');
-        new DataTable('#example4');
-        new DataTable('#example5');
-        new DataTable('#example6');
-        new DataTable('#example7');
-        new DataTable('#example8');
-        new DataTable('#example9');
-        new DataTable('#example10');
-        new DataTable('#example11');
-    </script>
-    <script>
-        window.addEventListener('scroll', function() {
-            const navbar = document.querySelector('.navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

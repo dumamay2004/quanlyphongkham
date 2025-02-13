@@ -7,18 +7,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.quanlybenhvien.Service.VaiTroService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
-@RequestMapping("/vaitro")
+@RequestMapping("/nguoidung/trangchu")
 public class VaiTroController {
     @Autowired
     VaiTroService vaiTroService;
 
-    @GetMapping
-    public String ListVaiTro(Model model) {
-        return "quanly/vaitro/list";
+    @GetMapping("/vaitro")
+    public String findAllVaiTro(Model model) {
+        model.addAttribute("VaiTroList", vaiTroService.findAll());
+        return "admin";
     }
     
 }
