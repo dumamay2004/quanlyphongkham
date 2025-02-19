@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.quanlybenhvien.Service.NguoiDungService;
+import com.example.quanlybenhvien.Service.QuanLyService;
 
 @Controller
 public class AdminController {
     @Autowired
-    NguoiDungService nguoiDungService;
+    QuanLyService nguoiDungService;
 
     @GetMapping("/nguoidung/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error,

@@ -10,50 +10,49 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.example.quanlybenhvien.Dao.NguoiDungDao;
-import com.example.quanlybenhvien.Entity.NguoiDung;
-import com.example.quanlybenhvien.Entity.Vaitro;
+import com.example.quanlybenhvien.Dao.QuanLyDao;
+import com.example.quanlybenhvien.Entity.QuanLy;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class NguoiDungService implements UserDetailsService{
+public class QuanLyService implements UserDetailsService{
     @Autowired
-    NguoiDungDao nguoiDungDao;
+    QuanLyDao quanlLyDao;
     @Autowired
     PasswordEncoder passwordEncoder;
 
     @Override
      public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<NguoiDung> optionalNguoiDung = nguoiDungDao.findByEmail(email);
+        Optional<QuanLy> optionalNguoiDung = quanlLyDao.findByEmail(email);
         if (optionalNguoiDung.isEmpty()) {
             throw new UsernameNotFoundException("Không tìm thấy người dùng");
         }
 
-        NguoiDung admin = optionalNguoiDung.get();
-        if (!"QUANLY".equals(admin.getVaiTro().getMaVT())) {
+        QuanLy admin = optionalNguoiDung.get();
+        if (!"VT00".equals(admin.getVai_tro().getMaVaiTro())) {
             throw new UsernameNotFoundException("Bạn không có quyền đăng nhập vào hệ thống ADMIN");
         }
 
         return User.builder()
                 .username(admin.getEmail())
-                .password(admin.getMatkhau())
-                .roles("QUANLY") // Chỉ admin
+                .password(admin.getMat_khau())
+                .roles("VT00") // Chỉ admin
                 .build();
     }
-    public void registerUser(NguoiDung user) {
-        user.setMatkhau(passwordEncoder.encode(user.getMatkhau())); // Mã hóa mật khẩu
-        nguoiDungDao.save(user);
+    public void registerUser(QuanLy user) {
+        user.setMat_khau(passwordEncoder.encode(user.getMat_khau())); // Mã hóa mật khẩu
+        quanlLyDao.save(user);
     }
 
     @Transactional
     public void updatePassword(String email, String newPassword) {
-        NguoiDung user = nguoiDungDao.findByEmail(email)
+        QuanLy user = quanlLyDao.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
         
         // Mã hóa mật khẩu trước khi cập nhật
-        user.setMatkhau(passwordEncoder.encode(newPassword));
-        nguoiDungDao.save(user);
+        user.setMat_khau(passwordEncoder.encode(newPassword));
+        quanlLyDao.save(user);
     }
 }
 

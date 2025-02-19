@@ -9,15 +9,15 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "NGUOIDUNG")
-public class NguoiDung {
+@Table(name = "QUANLY")
+public class QuanLy {
     @Id
-    private String maND;
-    private String hoten;
-    private String matkhau;
+    private String ma_quan_ly;
+    private String ho_ten;
+    private String mat_khau;
     private String email;
     @ManyToOne
-    @JoinColumn(name = "vaitro", nullable = false)
-    private Vaitro vaiTro;
+    @JoinColumn(name = "vai_tro", nullable = false)
+    private Vaitro vai_tro;
     private String hinh;
 }

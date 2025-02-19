@@ -24,7 +24,7 @@ public class AdminSecurityConfig {
         http
             .securityMatcher("/nguoidung/**","/api/**","/js/**") // Chỉ áp dụng cho "/admin/**"
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/nguoidung/**","/api/**").hasRole("QUANLY") // Chỉ ADMIN mới vào được
+                .requestMatchers("/nguoidung/**","/api/**").hasRole("VT00") // Chỉ ADMIN mới vào được
                 .anyRequest().authenticated())
             .formLogin(form -> form
                 .loginPage("/nguoidung/login") // Trang đăng nhập riêng cho admin

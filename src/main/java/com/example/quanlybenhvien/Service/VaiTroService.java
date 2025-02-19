@@ -20,16 +20,16 @@ public class VaiTroService {
     {
         return vaiTroDao.findAll();
     }
-    public Vaitro findVaitroByID(String maVT)
+    public Vaitro findVaitroByID(String maVaiTro)
     {
-        return vaiTroDao.findById(maVT).orElse(null);
+        return vaiTroDao.findByMaVaiTro(maVaiTro).orElse(null);
     }
-    public void saveVaiTro(Vaitro vaitro)
+    public void saveVaiTro(Vaitro maVaiTro)
     {
-        vaiTroDao.save(vaitro);
+        vaiTroDao.save(maVaiTro);
     }
-    public void deleteVaiTro(String maVT)
+    public void deleteVaiTro(String maVaiTro)
     {
-        vaiTroDao.deleteById(maVT);
+        vaiTroDao.deleteById(maVaiTro);
     }
 }
