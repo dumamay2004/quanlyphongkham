@@ -49,25 +49,25 @@ CREATE TABLE NHANVIEN (
 
 -- Tạo bảng bệnh nhân
 CREATE TABLE BENHNHAN (
-    ma_benh_nhan VARCHAR(20) NOT NULL PRIMARY KEY,
+    ma_benh_nhan int identity(1,1) PRIMARY KEY,
     ho_ten NVARCHAR(255) NOT NULL,
-    nam_sinh DATE NOT NULL,
-    gioi_tinh VARCHAR(10) NOT NULL,
-    sdt VARCHAR(15) NOT NULL UNIQUE,
+    nam_sinh DATE ,
+    gioi_tinh VARCHAR(10) ,
+    sdt VARCHAR(15) UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
-    mat_khau NVARCHAR(255) NOT NULL,
-    hinh NVARCHAR(255) NOT NULL,
-    bao_hiem NVARCHAR(50) NOT NULL,
-    tinh_tp NVARCHAR(100) NOT NULL,
-    quan_huyen NVARCHAR(100) NOT NULL,
-    duong NVARCHAR(255) NOT NULL
+    mat_khau NVARCHAR(255) ,
+    hinh NVARCHAR(255) ,
+    bao_hiem NVARCHAR(50),
+    tinh_tp NVARCHAR(100) ,
+    quan_huyen NVARCHAR(100),
+    duong NVARCHAR(255)
 );
 
 -- Tạo bảng bệnh án
 CREATE TABLE BENHAN (
-    ma_benh_an VARCHAR(20) NOT NULL PRIMARY KEY,
+    ma_benh_an int identity(1,1) PRIMARY KEY,
     ten_benh_an NVARCHAR(255) NOT NULL,
-    ma_benh_nhan VARCHAR(20) NOT NULL,
+    ma_benh_nhan int NOT NULL,
     ma_bac_si VARCHAR(20) NOT NULL,
     ngay_kham DATE NOT NULL,
     trieu_chung NVARCHAR(255) NOT NULL,
@@ -87,8 +87,8 @@ CREATE TABLE DICHVU (
 
 -- Tạo bảng lịch khám
 CREATE TABLE LICHKHAM (
-    ma_lich_kham VARCHAR(20) NOT NULL PRIMARY KEY,
-    ma_benh_nhan VARCHAR(20) NOT NULL,
+    ma_lich_kham int identity(1,1) PRIMARY KEY,
+    ma_benh_nhan int NOT NULL,
     ma_nhan_vien VARCHAR(20) NOT NULL,
     ma_dich_vu VARCHAR(20) NOT NULL,
     ma_chuyen_khoa VARCHAR(20) NOT NULL,
@@ -104,8 +104,8 @@ CREATE TABLE LICHKHAM (
 
 -- Tạo bảng chi tiết dịch vụ
 CREATE TABLE CHITIETDICHVU (
-    ma_chi_tiet_dich_vu VARCHAR(20) NOT NULL PRIMARY KEY,
-    ma_lich_kham VARCHAR(20) NOT NULL,
+    ma_chi_tiet_dich_vu int identity(1,1) PRIMARY KEY,
+    ma_lich_kham int NOT NULL,
     ma_dich_vu VARCHAR(20) NOT NULL,
     soluong INT NOT NULL,
     tong_tien DECIMAL(10,2) NOT NULL,
@@ -115,8 +115,8 @@ CREATE TABLE CHITIETDICHVU (
 
 -- Tạo bảng đơn thuốc
 CREATE TABLE DONTHUOC (
-    ma_don_thuoc VARCHAR(20) NOT NULL PRIMARY KEY,
-    ma_benh_an VARCHAR(20) NOT NULL,
+    ma_don_thuoc int identity(1,1) PRIMARY KEY,
+    ma_benh_an int NOT NULL,
     nhan_vien VARCHAR(20) NOT NULL,
     ngay_lap DATE NOT NULL,
     FOREIGN KEY (ma_benh_an) REFERENCES BENHAN(ma_benh_an),
@@ -138,19 +138,19 @@ CREATE TABLE THUOC (
 
 -- Tạo bảng chi tiết đơn thuốc
 CREATE TABLE CHITIETDONTHUOC (
-    ma_don_thuoc VARCHAR(20) NOT NULL,
+	ma_chi_tiet_dt int identity(1,1) primary key,
+    ma_don_thuoc int NOT NULL,
     ma_thuoc VARCHAR(20) NOT NULL,
     soluong INT NOT NULL,
     lieu_luong NVARCHAR(100) NOT NULL,
-	PRIMARY KEY(ma_don_thuoc,ma_thuoc),
     FOREIGN KEY (ma_don_thuoc) REFERENCES DONTHUOC(ma_don_thuoc),
     FOREIGN KEY (ma_thuoc) REFERENCES THUOC(ma_thuoc)
 );
 
 -- Tạo bảng thanh toán
 CREATE TABLE THANHTOAN (
-    ma_thanh_toan VARCHAR(20) NOT NULL PRIMARY KEY,
-    ma_lich_kham VARCHAR(20) NOT NULL,
+    ma_thanh_toan int identity(1,1) PRIMARY KEY,
+    ma_lich_kham int NOT NULL,
     ngay_thanh_toan DATE NOT NULL,
     bao_hiem_ho_tro DECIMAL(10,2) NOT NULL,
     so_tien_phai_tra DECIMAL(10,2) NOT NULL,
@@ -162,8 +162,8 @@ CREATE TABLE THANHTOAN (
 
 -- Tạo bảng thanh toán đơn thuốc
 CREATE TABLE THANHTOAN_DONTHUOC (
-    ma_thanh_toan_dt VARCHAR(20) NOT NULL PRIMARY KEY,
-    ma_don_thuoc VARCHAR(20) NOT NULL,
+    ma_thanh_toan_dt int identity(1,1) NOT NULL PRIMARY KEY,
+    ma_don_thuoc int NOT NULL,
     ngay_thanh_toan DATE NOT NULL,
     bao_hiem_ho_tro DECIMAL(10,2) NOT NULL,
     so_tien_phai_tra DECIMAL(10,2) NOT NULL,
@@ -208,29 +208,29 @@ INSERT INTO NHANVIEN (ma_nhan_vien, ho_ten, gioi_tinh, dia_chi, SDT, cccd, email
 ('NV03', N'Lê Văn C', 'Nam', N'Đà Nẵng', '0912345678', '192837465012', 'vanc@example.com', 'c.jpg', 'VT03', 'CK03');
 
 -- Bảng BENHNHAN
-INSERT INTO BENHNHAN (ma_benh_nhan, ho_ten, nam_sinh, gioi_tinh, sdt, email, mat_khau, hinh, bao_hiem, tinh_tp, quan_huyen, duong) VALUES
-('BN01', N'Phạm Thị X', '1990-05-15', 'Nữ', '0901122334', 'phamx@example.com', '123456', 'x.jpg', 'BHYT123', 'Hà Nội', 'Cầu Giấy', 'Trần Duy Hưng'),
-('BN02', N'Hoàng Văn Y', '1985-10-20', 'Nam', '0978123456', 'hoangy@example.com', 'abcdef', 'y.jpg', 'BHYT456', 'Hồ Chí Minh', 'Quận 1', 'Lê Lợi'),
-('BN03', N'Đinh Thị Z', '2000-08-25', 'Nữ', '0965566778', 'dinhtz@example.com', 'qwerty', 'z.jpg', 'BHYT789', 'Đà Nẵng', 'Hải Châu', 'Nguyễn Văn Linh');
+INSERT INTO BENHNHAN ( ho_ten, nam_sinh, gioi_tinh, sdt, email, mat_khau, hinh, bao_hiem, tinh_tp, quan_huyen, duong) VALUES
+( N'Phạm Thị X', '1990-05-15', 'Nữ', '0901122334', 'phamx@example.com', '123456', 'x.jpg', 'BHYT123', 'Hà Nội', 'Cầu Giấy', 'Trần Duy Hưng'),
+( N'Hoàng Văn Y', '1985-10-20', 'Nam', '0978123456', 'hoangy@example.com', 'abcdef', 'y.jpg', 'BHYT456', 'Hồ Chí Minh', 'Quận 1', 'Lê Lợi'),
+( N'Đinh Thị Z', '2000-08-25', 'Nữ', '0965566778', 'dinhtz@example.com', 'qwerty', 'z.jpg', 'BHYT789', 'Đà Nẵng', 'Hải Châu', 'Nguyễn Văn Linh');
 
 
 -- Bảng BENHAN (phụ thuộc NHANVIEN và BENHNHAN)
-INSERT INTO BENHAN (ma_benh_an, ten_benh_an, ma_benh_nhan, ma_bac_si, ngay_kham, trieu_chung, dieu_tri, ghi_chu) VALUES
-('BA01', N'Cảm cúm', 'BN01', 'NV01', '2024-02-01', N'Sốt, ho, mệt mỏi', N'Uống thuốc hạ sốt', N'Tái khám sau 1 tuần'),
-('BA02', N'Viêm phổi', 'BN02', 'NV01', '2024-02-02', N'Khó thở, ho có đờm', N'Dùng kháng sinh, nghỉ ngơi', N'Tái khám sau 2 tuần'),
-('BA03', N'Đau dạ dày', 'BN03', 'NV01', '2024-02-03', N'Đau bụng, buồn nôn', N'Ăn uống khoa học, thuốc dạ dày', N'Không uống rượu bia');
+INSERT INTO BENHAN ( ten_benh_an, ma_benh_nhan, ma_bac_si, ngay_kham, trieu_chung, dieu_tri, ghi_chu) VALUES
+(N'Cảm cúm', 1, 'NV01', '2024-02-01', N'Sốt, ho, mệt mỏi', N'Uống thuốc hạ sốt', N'Tái khám sau 1 tuần'),
+(N'Viêm phổi', 2, 'NV01', '2024-02-02', N'Khó thở, ho có đờm', N'Dùng kháng sinh, nghỉ ngơi', N'Tái khám sau 2 tuần'),
+(N'Đau dạ dày', 3, 'NV01', '2024-02-03', N'Đau bụng, buồn nôn', N'Ăn uống khoa học, thuốc dạ dày', N'Không uống rượu bia');
 
 -- Bảng LICHKHAM (phụ thuộc BENHNHAN, NHANVIEN, DICHVU, CHUYENKHOA)
-INSERT INTO LICHKHAM (ma_lich_kham, ma_benh_nhan, ma_nhan_vien, ma_dich_vu, ma_chuyen_khoa, ngay_kham, gio_kham, trang_thai, ghi_chu) VALUES
-('LK01', 'BN01', 'NV01', 'DV01', 'CK01', '2024-02-10', '08:30:00', N'Chờ khám', N''),
-('LK02', 'BN02', 'NV02', 'DV02', 'CK02', '2024-02-11', '09:00:00', N'Đã khám', N''),
-('LK03', 'BN03', 'NV03', 'DV03', 'CK03', '2024-02-12', '10:00:00', N'Chờ khám', N'');
-
+INSERT INTO LICHKHAM ( ma_benh_nhan, ma_nhan_vien, ma_dich_vu, ma_chuyen_khoa, ngay_kham, gio_kham, trang_thai, ghi_chu) VALUES
+(1, 'NV01', 'DV01', 'CK01', '2024-02-10', '08:30:00', N'Chờ khám', N''),
+(2, 'NV02', 'DV02', 'CK02', '2024-02-11', '09:00:00', N'Đã khám', N''),
+(3, 'NV03', 'DV03', 'CK03', '2024-02-12', '10:00:00', N'Chờ khám', N'');
+select * from donthuoc
 -- Bảng DONTHUOC (phụ thuộc BENHAN và NHANVIEN)
-INSERT INTO DONTHUOC (ma_don_thuoc, ma_benh_an, nhan_vien, ngay_lap) VALUES
-('DT01', 'BA01', 'NV01', '2024-02-10'),
-('DT02', 'BA02', 'NV01', '2024-02-11'),
-('DT03', 'BA03', 'NV01', '2024-02-12');
+INSERT INTO DONTHUOC ( ma_benh_an, nhan_vien, ngay_lap) VALUES
+( 1, 'NV01', '2024-02-10'),
+( 2, 'NV01', '2024-02-11'),
+( 3, 'NV01', '2024-02-12');
 
 -- Bảng THUOC
 INSERT INTO THUOC (ma_thuoc, ten_thuoc, mo_ta, gia_thuoc, don_vi, han_su_dung, nhan_vien, so_luong_hien_co) VALUES
@@ -240,27 +240,27 @@ INSERT INTO THUOC (ma_thuoc, ten_thuoc, mo_ta, gia_thuoc, don_vi, han_su_dung, n
 
 -- Bảng CHITIETDONTHUOC
 INSERT INTO CHITIETDONTHUOC (ma_don_thuoc, ma_thuoc, soluong, lieu_luong) VALUES
-('DT01', 'T01', 10, N'1 viên/lần, 3 lần/ngày'),
-('DT02', 'T02', 14, N'1 viên/lần, 2 lần/ngày'),
-('DT03', 'T03', 20, N'1 viên/lần, 1 lần/ngày');
+(1, 'T01', 10, N'1 viên/lần, 3 lần/ngày'),
+(2, 'T02', 14, N'1 viên/lần, 2 lần/ngày'),
+(3, 'T03', 20, N'1 viên/lần, 1 lần/ngày');
 
 -- Bảng THANHTOAN
-INSERT INTO THANHTOAN (ma_thanh_toan, ma_lich_kham, ngay_thanh_toan, bao_hiem_ho_tro, so_tien_phai_tra, tong_tien, hinh_thuc, trang_thai) VALUES
-('TT01', 'LK01', '2024-02-10', 100000, 400000, 500000, N'Tiền mặt', N'Đã thanh toán'),
-('TT02', 'LK02', '2024-02-11', 50000, 150000, 200000, N'Thanh toán online', N'Đã thanh toán'),
-('TT03', 'LK03', '2024-02-12', 100000, 200000, 300000, N'Tiền mặt', N'Chưa thanh toán');
-
+INSERT INTO THANHTOAN ( ma_lich_kham, ngay_thanh_toan, bao_hiem_ho_tro, so_tien_phai_tra, tong_tien, hinh_thuc, trang_thai) VALUES
+(1 ,'2024-02-10', 100000, 400000, 500000, N'Tiền mặt', N'Đã thanh toán'),
+(2, '2024-02-11', 50000, 150000, 200000, N'Thanh toán online', N'Đã thanh toán'),
+(3 ,'2024-02-12', 100000, 200000, 300000, N'Tiền mặt', N'Chưa thanh toán');
+select * from donthuoc
 -- Bảng CHITIETDICHVU
-INSERT INTO CHITIETDICHVU (ma_chi_tiet_dich_vu, ma_lich_kham, ma_dich_vu, soluong, tong_tien) VALUES
-('CTDV01', 'LK01', 'DV01', 1, 500000),
-('CTDV02', 'LK02', 'DV02', 1, 200000),
-('CTDV03', 'LK03', 'DV03', 1, 300000);
+INSERT INTO CHITIETDICHVU ( ma_lich_kham, ma_dich_vu, soluong, tong_tien) VALUES
+(1, 'DV01', 1, 500000),
+( 2, 'DV02', 1, 200000),
+(3, 'DV03', 1, 300000);
 
 -- Bảng THANHTOANDONTHUOC
-INSERT INTO THANHTOAN_DONTHUOC (ma_thanh_toan_dt, ma_don_thuoc, ngay_thanh_toan, bao_hiem_ho_tro, so_tien_phai_tra, tong_tien, hinh_thuc, trang_thai) VALUES
-('TTDT01', 'DT01', '2025-02-18', 50000, 450000, 500000, 'Tiền mặt', 'Đã thanh toán'),
-('TTDT02', 'DT02', '2025-02-18', 30000, 170000, 200000, 'Chuyển khoản', 'Đã thanh toán'),
-('TTDT03', 'DT03', '2025-02-18', 40000, 260000, 300000, 'Tiền mặt', 'Đã thanh toán');
+INSERT INTO THANHTOAN_DONTHUOC ( ma_don_thuoc, ngay_thanh_toan, bao_hiem_ho_tro, so_tien_phai_tra, tong_tien, hinh_thuc, trang_thai) VALUES
+(1, '2025-02-18', 50000, 450000, 500000, 'Tiền mặt', 'Đã thanh toán'),
+(2, '2025-02-18', 30000, 170000, 200000, 'Chuyển khoản', 'Đã thanh toán'),
+(3,'2025-02-18', 40000, 260000, 300000, 'Tiền mặt', 'Đã thanh toán');
 
 
 -- trigger 
