@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+
 public interface BenhNhanDao extends JpaRepository<BenhNhan, Integer> {
-    Optional<BenhNhan> findBenhNhanByEmail(String email);
-    Optional<BenhNhan> findById(Integer maBN);
+    Optional<BenhNhan> findByEmail(String email);
+    Optional<BenhNhan> findById(Integer maBenhNhan);
     boolean existsByEmail(String email);
-    Optional<BenhNhan> findBySodienthoai(String sodienthoai);
+    Optional<BenhNhan> findBySdt(String sdt);
 }

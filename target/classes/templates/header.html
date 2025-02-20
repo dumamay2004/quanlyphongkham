@@ -83,7 +83,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false" th:text="${user != null ? user.hoten : 'Tài khoản'}">
+                            aria-expanded="false" th:text="${user != null ? user.ho_ten : 'Tài khoản'}">
                         </a>
 
                         <ul class="dropdown-menu">
@@ -93,7 +93,7 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li th:if="${user != null}"><!-- Liên kết đến trang cập nhật thông tin người dùng -->
-                                <a th:href="@{/benhnhan/edit/{maBN}(maBN=${user.maBN})}" class="btn ">Chỉnh sửa
+                                <a th:href="@{/benhnhan/edit/{ma_benh_nhan}(ma_benh_nhan=${user.ma_benh_nhan})}" class="btn ">Chỉnh sửa
                                     thông tin</a>
                             </li>
                             <li th:if="${user == null}"><a class="dropdown-item" href="/dangky">Đăng Ký</a></li>

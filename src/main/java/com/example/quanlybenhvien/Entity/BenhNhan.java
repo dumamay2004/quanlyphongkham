@@ -1,6 +1,8 @@
 package com.example.quanlybenhvien.Entity;
 
 
+import java.util.Date;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,17 +16,41 @@ import lombok.NoArgsConstructor;
 public class BenhNhan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer maBN ;
-    Integer soBH ;
-    String gioitinh ;
-    String hoten ;
-    String sodienthoai ;
-    String matkhau ;
-    @Column(unique = true)
-    String email ;
-    String quanhuyen ;
-    String tinh_tp ;
-    String hinh;
+    @Column(name = "ma_benh_nhan")
+    private Integer maBenhNhan;
+
+    @Column(name = "ho_ten")
+    private String hoTen;
+
+    @Column(name = "nam_sinh")
+    private Date namSinh;
+
+    @Column(name = "gioi_tinh")
+    private String gioiTinh;
+
+    @Column(name = "sdt")
+    private String sdt;
+
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "mat_khau")
+    private String matKhau;
+
+    @Column(name = "hinh")
+    private String hinh;
+
+    @Column(name = "bao_hiem")
+    private String baoHiem;
+
+    @Column(name = "tinh_tp")
+    private String tinhTp;
+
+    @Column(name = "quan_huyen")
+    private String quanHuyen;
+
+    @Column(name = "duong")
+    private String duong;
     @Transient
     private String nhapLaiMatKhau;
 }

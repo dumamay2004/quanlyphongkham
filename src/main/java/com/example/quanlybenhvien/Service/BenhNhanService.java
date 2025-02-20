@@ -30,17 +30,17 @@ public class BenhNhanService {
         }
 
         // Kiểm tra email đã tồn tại
-        if (benhNhanDao.findBenhNhanByEmail(benhNhan.getEmail()).isPresent()) {
+        if (benhNhanDao.findbyEmail(benhNhan.getEmail()).isPresent()) {
             return "Email đã tồn tại!";
         }
 
         // Kiểm tra mật khẩu và xác nhận mật khẩu
-        if (!benhNhan.getMatkhau().equals(benhNhan.getNhapLaiMatKhau())) {
+        if (!benhNhan.getMatKhau().equals(benhNhan.getNhapLaiMatKhau())) {
             return "Mật khẩu và xác nhận mật khẩu không trùng khớp!";
         }
 
         // Mã hóa mật khẩu
-        benhNhan.setMatkhau(passwordEncoder.encode(benhNhan.getMatkhau()));
+        benhNhan.setMatKhau(passwordEncoder.encode(benhNhan.getMatKhau()));
 
         // Lưu người dùng vào cơ sở dữ liệu
         try {
@@ -62,12 +62,17 @@ public class BenhNhanService {
         BenhNhan existingBenhNhan = benhNhanDao.findById(id).orElseThrow(() -> new EntityNotFoundException("Bệnh nhân không tồn tại"));
 
         // Cập nhật các trường dữ liệu
-        existingBenhNhan.setHoten(benhNhan.getHoten());
+        existingBenhNhan.setHoTen(benhNhan.getHoTen());
+        existingBenhNhan.setNamSinh(benhNhan.getNamSinh());
+        existingBenhNhan.setGioiTinh(benhNhan.getGioiTinh());
+        existingBenhNhan.setSdt(benhNhan.getSdt());
         existingBenhNhan.setEmail(benhNhan.getEmail());
-        existingBenhNhan.setGioitinh(benhNhan.getGioitinh());
-        existingBenhNhan.setSodienthoai(benhNhan.getSodienthoai());
-        existingBenhNhan.setQuanhuyen(benhNhan.getQuanhuyen());
-        existingBenhNhan.setTinh_tp(benhNhan.getTinh_tp());
+        existingBenhNhan.setMatKhau(benhNhan.getMatKhau());
+        existingBenhNhan.setHinh(benhNhan.getHinh());
+        existingBenhNhan.setBaoHiem(benhNhan.getBaoHiem());
+        existingBenhNhan.setTinhTp(benhNhan.getTinhTp());
+        existingBenhNhan.setQuanHuyen(benhNhan.getQuanHuyen());
+        existingBenhNhan.setDuong(benhNhan.getDuong());
 
         // Lưu lại bản ghi đã cập nhật
         return benhNhanDao.save(existingBenhNhan);

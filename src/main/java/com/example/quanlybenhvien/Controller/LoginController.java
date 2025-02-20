@@ -44,11 +44,11 @@ public class LoginController {
             HttpSession session,
             Model model) {
         // Kiểm tra người dùng trong cơ sở dữ liệu
-        BenhNhan user = benhNhanDao.findBenhNhanByEmail(email).orElse(null);
+        BenhNhan user = benhNhanDao.findbyEmail(email).orElse(null);
         if (user != null) {
             // Kiểm tra mật khẩu
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            if (passwordEncoder.matches(matKhau, user.getMatkhau())) {
+            if (passwordEncoder.matches(matKhau, user.getMatKhau())) {
                 session.setAttribute("user", user);
                 return "redirect:/index";
             } else {
@@ -82,13 +82,13 @@ public class LoginController {
         }
 
         // Kiểm tra người dùng trong cơ sở dữ liệu
-        BenhNhan user = benhNhanDao.findBenhNhanByEmail(email).orElse(null);
+        BenhNhan user = benhNhanDao.findbyEmail(email).orElse(null);
 
         if (user == null) {
             // Nếu chưa tồn tại, tạo mới người dùng
             user = new BenhNhan();
             user.setEmail(email);
-            user.setHoten(name);
+            user.setHoTen(name);
             user.setHinh(picture); // Lưu URL hình ảnh
             benhNhanDao.save(user);
         }
