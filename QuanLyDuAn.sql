@@ -35,6 +35,7 @@ CREATE TABLE CHUYENKHOA (
 CREATE TABLE NHANVIEN (
     ma_nhan_vien VARCHAR(20) NOT NULL PRIMARY KEY,
     ho_ten NVARCHAR(255) NOT NULL,
+	mat_khau varchar(255) NOT NULL,
     gioi_tinh VARCHAR(10) NOT NULL,
     dia_chi NVARCHAR(255) NOT NULL,
     SDT VARCHAR(15) NOT NULL UNIQUE,
@@ -179,9 +180,8 @@ CREATE TABLE THANHTOAN_DONTHUOC (
 INSERT INTO VAITRO (ma_vai_tro, ten_vai_tro) VALUES
 ('VT01', N'Bác sĩ'),
 ('VT02', N'Y tá'),
+('VT00', N'Quản lý'),
 ('VT03', N'Nhân viên tiếp tân');
-INSERT INTO VAITRO (ma_vai_tro, ten_vai_tro) VALUES
-('VT00', N'Quản lý');
 
 -- Bảng QUANLY
 INSERT INTO QUANLY (ma_quan_ly, ho_ten, mat_khau, email, vai_tro, hinh)
