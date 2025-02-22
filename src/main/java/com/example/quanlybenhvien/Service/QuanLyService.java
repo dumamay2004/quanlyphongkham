@@ -30,18 +30,18 @@ public class QuanLyService implements UserDetailsService{
         }
 
         QuanLy admin = optionalNguoiDung.get();
-        if (!"VT00".equals(admin.getVai_tro().getMaVaiTro())) {
+        if (!"VT00".equals(admin.getVaiTro().getMaVaiTro())) {
             throw new UsernameNotFoundException("Bạn không có quyền đăng nhập vào hệ thống ADMIN");
         }
 
         return User.builder()
                 .username(admin.getEmail())
-                .password(admin.getMat_khau())
+                .password(admin.getMatKhau())
                 .roles("VT00") // Chỉ admin
                 .build();
     }
     public void registerUser(QuanLy user) {
-        user.setMat_khau(passwordEncoder.encode(user.getMat_khau())); // Mã hóa mật khẩu
+        user.setMatKhau(passwordEncoder.encode(user.getMatKhau())); // Mã hóa mật khẩu
         quanlLyDao.save(user);
     }
 
@@ -51,7 +51,7 @@ public class QuanLyService implements UserDetailsService{
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
         
         // Mã hóa mật khẩu trước khi cập nhật
-        user.setMat_khau(passwordEncoder.encode(newPassword));
+        user.setMatKhau(passwordEncoder.encode(newPassword));
         quanlLyDao.save(user);
     }
 }

@@ -44,7 +44,7 @@ public class LoginController {
             HttpSession session,
             Model model) {
         // Kiểm tra người dùng trong cơ sở dữ liệu
-        BenhNhan user = benhNhanDao.findbyEmail(email).orElse(null);
+        BenhNhan user = benhNhanDao.findByEmail(email).orElse(null);
         if (user != null) {
             // Kiểm tra mật khẩu
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -82,7 +82,7 @@ public class LoginController {
         }
 
         // Kiểm tra người dùng trong cơ sở dữ liệu
-        BenhNhan user = benhNhanDao.findbyEmail(email).orElse(null);
+        BenhNhan user = benhNhanDao.findByEmail(email).orElse(null);
 
         if (user == null) {
             // Nếu chưa tồn tại, tạo mới người dùng

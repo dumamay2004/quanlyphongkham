@@ -30,7 +30,7 @@ public class BenhNhanService {
         }
 
         // Kiểm tra email đã tồn tại
-        if (benhNhanDao.findbyEmail(benhNhan.getEmail()).isPresent()) {
+        if (benhNhanDao.findByEmail(benhNhan.getEmail()).isPresent()) {
             return "Email đã tồn tại!";
         }
 

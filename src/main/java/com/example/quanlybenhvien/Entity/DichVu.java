@@ -26,6 +26,6 @@ public class DichVu {
     @Column(name = "mo_ta")
     private String moTa;
 
-    @Column(name = "gia")
-    private BigDecimal gia;
+    @Column(nullable = false, name = "gia")
+    private Double gia;
 }

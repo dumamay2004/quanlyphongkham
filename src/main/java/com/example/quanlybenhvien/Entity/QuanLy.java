@@ -1,5 +1,6 @@
 package com.example.quanlybenhvien.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -12,12 +13,22 @@ import lombok.Data;
 @Table(name = "QUANLY")
 public class QuanLy {
     @Id
-    private String ma_quan_ly;
-    private String ho_ten;
-    private String mat_khau;
+    @Column(name = "ma_quan_ly", length = 5)
+    private String maQuanLy;
+
+    @Column(name = "ho_ten", nullable = false)
+    private String hoTen;
+
+    @Column(name = "mat_khau", nullable = false)
+    private String matKhau;
+
+    @Column(name = "email", nullable = false)
     private String email;
+
     @ManyToOne
-    @JoinColumn(name = "vai_tro", nullable = false)
-    private Vaitro vai_tro;
+    @JoinColumn(name = "vai_tro", referencedColumnName = "ma_vai_tro")
+    private Vaitro vaiTro;
+
+    @Column(name = "hinh")
     private String hinh;
 }

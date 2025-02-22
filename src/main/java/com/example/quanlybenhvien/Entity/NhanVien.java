@@ -23,6 +23,9 @@ public class NhanVien {
     @Column(name = "ho_ten")
     private String hoTen;
 
+    @Column(name = "mat_khau")
+    private String matKhau;
+
     @Column(name = "gioi_tinh")
     private String gioiTinh;
 
@@ -41,10 +44,11 @@ public class NhanVien {
     @Column(name = "hinh")
     private String hinh;
 
-    @Column(name = "vai_tro")
-    private String vaiTro;
+    @ManyToOne
+    @JoinColumn(name = "vai_tro", referencedColumnName = "ma_vai_tro")
+    private Vaitro vaiTro;
 
     @ManyToOne
-    @JoinColumn(name = "chuyen_khoa")
+    @JoinColumn(name = "chuyen_khoa", referencedColumnName = "ma_chuyen_khoa")
     private ChuyenKhoa chuyenKhoa;
 }

@@ -1,5 +1,6 @@
 package com.example.quanlybenhvien.Entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,18 +20,20 @@ import lombok.NoArgsConstructor;
 public class ChiTietDonThuoc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer maChiTietDT;
+    @Column(name = "ma_chi_tiet_dt")
+    private Integer maChiTietDt;
 
+    @Column(name = "ma_don_thuoc", nullable = false)
+    private Integer maDonThuoc;
+
+    @Column(name = "ma_thuoc", length = 20, nullable = false)
+    private String maThuoc;
+
+    @Column(name = "soluong", nullable = false)
     private Integer soLuong;
+
+    @Column(name = "lieu_luong", nullable = false)
     private String lieuLuong;
-
-    @ManyToOne
-    @JoinColumn(name = "ma_don_thuoc")
-    private DonThuoc donThuoc;
-
-    @ManyToOne
-    @JoinColumn(name = "ma_thuoc")
-    private Thuoc thuoc;
 }
 
 
