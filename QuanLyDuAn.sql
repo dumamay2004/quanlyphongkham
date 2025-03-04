@@ -1,6 +1,5 @@
 ﻿-- Tạo database
 CREATE DATABASE QuanLyDuAn;
-
 USE QuanLyDuAn;
 go
 -- drop database QuanLyDuAn
@@ -20,17 +19,35 @@ CREATE TABLE QUANLY
 	ho_ten nvarchar(225) not null,
 	mat_khau varchar(255) not null,
 	email nvarchar(225) not null,
+	SDT VARCHAR(15) NOT NULL UNIQUE,
+    cccd VARCHAR(20) NOT NULL UNIQUE,
 	vai_tro varchar(20) not null,
 	hinh nvarchar(100),
+	dia_chi NVARCHAR(255) NOT NULL,
 	foreign key (vai_tro) REFERENCES VAITRO(ma_vai_tro)
 )
-
 -- Tạo bảng chuyên khoa
 CREATE TABLE CHUYENKHOA (
     ma_chuyen_khoa VARCHAR(20) NOT NULL PRIMARY KEY,
     ten_chuyen_khoa NVARCHAR(255) NOT NULL
 );
 
+-- Tạo bảng nhân viên
+CREATE TABLE BACSI (
+    ma_bac_si VARCHAR(20) NOT NULL PRIMARY KEY,
+    ho_ten NVARCHAR(255) NOT NULL,
+	mat_khau varchar(255) NOT NULL,
+    gioi_tinh VARCHAR(10) NOT NULL,
+    dia_chi NVARCHAR(255) NOT NULL,
+    SDT VARCHAR(15) NOT NULL UNIQUE,
+    cccd VARCHAR(20) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    hinh NVARCHAR(255) NOT NULL,
+    vai_tro VARCHAR(20) NOT NULL,
+    chuyen_khoa VARCHAR(20) NULL,
+    FOREIGN KEY (vai_tro) REFERENCES VAITRO(ma_vai_tro),
+    FOREIGN KEY (chuyen_khoa) REFERENCES CHUYENKHOA(ma_chuyen_khoa)
+);
 -- Tạo bảng nhân viên
 CREATE TABLE NHANVIEN (
     ma_nhan_vien VARCHAR(20) NOT NULL PRIMARY KEY,
@@ -43,9 +60,7 @@ CREATE TABLE NHANVIEN (
     email VARCHAR(255) NOT NULL UNIQUE,
     hinh NVARCHAR(255) NOT NULL,
     vai_tro VARCHAR(20) NOT NULL,
-    chuyen_khoa VARCHAR(20) NOT NULL,
     FOREIGN KEY (vai_tro) REFERENCES VAITRO(ma_vai_tro),
-    FOREIGN KEY (chuyen_khoa) REFERENCES CHUYENKHOA(ma_chuyen_khoa)
 );
 
 -- Tạo bảng bệnh nhân
@@ -58,7 +73,6 @@ CREATE TABLE BENHNHAN (
     email VARCHAR(255) NOT NULL UNIQUE,
     mat_khau NVARCHAR(255) ,
     hinh NVARCHAR(255) ,
-    bao_hiem NVARCHAR(50),
     tinh_tp NVARCHAR(100) ,
     quan_huyen NVARCHAR(100),
     duong NVARCHAR(255)
@@ -94,7 +108,7 @@ CREATE TABLE LICHKHAM (
     ma_dich_vu VARCHAR(20) NOT NULL,
     ma_chuyen_khoa VARCHAR(20) NOT NULL,
     ngay_kham DATE NOT NULL,
-    gio_kham DATE NOT NULL,
+    gio_kham DATETIME NOT NULL,
     trang_thai NVARCHAR(50) NOT NULL,
     ghi_chu NVARCHAR(255) NOT NULL,
     FOREIGN KEY (ma_benh_nhan) REFERENCES BENHNHAN(ma_benh_nhan),
@@ -136,6 +150,16 @@ CREATE TABLE THUOC (
 	so_luong_hien_co INT NOT NULL,
     FOREIGN KEY (nhan_vien) REFERENCES NHANVIEN(ma_nhan_vien)
 );
+CREATE TABLE NHAPTHUOC (
+    ma_nhap_thuoc INT IDENTITY(1,1) PRIMARY KEY,
+    ma_nhan_vien VARCHAR(20) NOT NULL,
+	ma_thuoc VARCHAR(20) NOT NULL,
+    so_luong_nhap INT NOT NULL,
+    ngay_nhap DATE NOT NULL DEFAULT GETDATE(),
+    ghi_chu NVARCHAR(255),
+    FOREIGN KEY (ma_nhan_vien) REFERENCES NHANVIEN(ma_nhan_vien) ON DELETE CASCADE,
+    FOREIGN KEY (ma_thuoc) REFERENCES THUOC(ma_thuoc) ON DELETE CASCADE
+);
 
 -- Tạo bảng chi tiết đơn thuốc
 CREATE TABLE CHITIETDONTHUOC (
@@ -149,11 +173,10 @@ CREATE TABLE CHITIETDONTHUOC (
 );
 
 -- Tạo bảng thanh toán
-CREATE TABLE THANHTOAN (
+CREATE TABLE HOANDON (
     ma_thanh_toan int identity(1,1) PRIMARY KEY,
-    ma_lich_kham int NOT NULL,
+    ma_lich_kham int NOT NULL UNIQUE,
     ngay_thanh_toan DATE NOT NULL,
-    bao_hiem_ho_tro DECIMAL(10,2) NOT NULL,
     so_tien_phai_tra DECIMAL(10,2) NOT NULL,
     tong_tien DECIMAL(10,2) NOT NULL,
     hinh_thuc NVARCHAR(100) NOT NULL,
@@ -162,7 +185,7 @@ CREATE TABLE THANHTOAN (
 );
 
 -- Tạo bảng thanh toán đơn thuốc
-CREATE TABLE THANHTOAN_DONTHUOC (
+CREATE TABLE HOADON_DONTHUOC (
     ma_thanh_toan_dt int identity(1,1) NOT NULL PRIMARY KEY,
     ma_don_thuoc int NOT NULL,
     ngay_thanh_toan DATE NOT NULL,
@@ -184,10 +207,10 @@ INSERT INTO VAITRO (ma_vai_tro, ten_vai_tro) VALUES
 ('VT03', N'Nhân viên tiếp tân');
 
 -- Bảng QUANLY
-INSERT INTO QUANLY (ma_quan_ly, ho_ten, mat_khau, email, vai_tro, hinh)
-VALUES ('QL01', N'Nguyễn Văn A', '123', N'a@gmail.com', 'VT00', 'avatar.jpg');
+INSERT INTO QUANLY (ma_quan_ly, ho_ten, mat_khau, email, SDT, cccd, vai_tro, hinh, dia_chi)  
+VALUES ('QL001', N'Võ Nguyễn Duy Tân', '123', 'a@gmail.com', '0987654321', '123456789012', 'VT00', 'avatar.jpg', N'123 Đường ABC, TP. HCM');
 UPDATE QUANLY SET mat_khau = '$2a$10$RsgeqGNABvDJH6c1cCYHqetCYyat6y.cK3eMTPQBjRlLRj/NTJhRO' WHERE email = 'a@gmail.com';
-select * from QUANLY
+select * from quanly
 -- Bảng CHUYENKHOA
 INSERT INTO CHUYENKHOA (ma_chuyen_khoa, ten_chuyen_khoa) VALUES
 ('CK01', N'Nội khoa'),
@@ -199,7 +222,7 @@ INSERT INTO DICHVU (ma_dich_vu, ten_dich_vu, mo_ta, gia) VALUES
 ('DV01', N'Khám tổng quát', N'Kiểm tra sức khỏe tổng quát', 500000),
 ('DV02', N'Xét nghiệm máu', N'Xét nghiệm máu tổng quát', 200000),
 ('DV03', N'Chụp X-quang', N'Chụp X-quang phổi', 300000);
-
+select * from BENHNHAN
 
 -- Bảng NHANVIEN (tham chiếu VAITRO và CHUYENKHOA)
 INSERT INTO NHANVIEN (ma_nhan_vien, ho_ten, gioi_tinh, dia_chi, SDT, cccd, email, hinh, vai_tro, chuyen_khoa) VALUES

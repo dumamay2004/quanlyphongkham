@@ -1,7 +1,8 @@
 package com.example.quanlybenhvien.Service;
 
-import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.quanlybenhvien.Dao.VaiTroDao;
@@ -32,4 +33,13 @@ public class VaiTroService {
     {
         vaiTroDao.deleteById(maVaiTro);
     }
+    public List<Vaitro> timKiemVaiTro(String keyword) {
+    if (keyword == null || keyword.trim().isEmpty()) {
+        return vaiTroDao.findAll();  // Trả về danh sách đầy đủ
+    }
+    List<Vaitro> list = vaiTroDao.findByTenVaiTroContainingIgnoreCase(keyword);
+    
+    // Kiểm tra nếu list null, trả về danh sách rỗng để tránh lỗi
+    return list != null ? list : new ArrayList<>();
+}
 }

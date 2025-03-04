@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.quanlybenhvien.Dao.QuanLyDao;
 import com.example.quanlybenhvien.Entity.QuanLy;
+import com.example.quanlybenhvien.Entity.Vaitro;
 
 import jakarta.transaction.Transactional;
 
@@ -53,6 +54,15 @@ public class QuanLyService implements UserDetailsService{
         // Mã hóa mật khẩu trước khi cập nhật
         user.setMatKhau(passwordEncoder.encode(newPassword));
         quanlLyDao.save(user);
+    }    
+
+    public QuanLy findQuanLyByID(String maQuanLy)
+    {
+        return quanlLyDao.findByMaQuanLy(maQuanLy).orElse(null);
+    }
+    public void saveQuanLy(QuanLy maQuanLy)
+    {
+        quanlLyDao.save(maQuanLy);
     }
 }
 

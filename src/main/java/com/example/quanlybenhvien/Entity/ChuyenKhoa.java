@@ -24,6 +24,9 @@ public class ChuyenKhoa {
     @Column(name = "ten_chuyen_khoa")
     private String tenChuyenKhoa;
 
+    @Column(name = "hinh")
+    private String hinh;
+
     @OneToMany(mappedBy = "chuyenKhoa")
     private List<NhanVien> nhanvien;
 }

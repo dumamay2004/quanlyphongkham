@@ -24,11 +24,11 @@ public class AdminController {
         if (logout != null) {
             model.addAttribute("message", "Đã đăng xuất thành công!");
         }
-        return "admin-login";
+        return "admin/admin-login";
     }
 
     @GetMapping("/nguoidung/trangchu")
     public String showAdminHome() {
-        return "admin";
+        return "admin/admin";
     }
 }

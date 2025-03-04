@@ -22,6 +22,12 @@ public class QuanLy {
     @Column(name = "mat_khau", nullable = false)
     private String matKhau;
 
+    @Column(name = "SDT", nullable = false, unique = true, length = 15)
+    private String sdt; 
+
+    @Column(name = "cccd", nullable = false, unique = true, length = 20)
+    private String cccd;
+
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -31,4 +37,7 @@ public class QuanLy {
 
     @Column(name = "hinh")
     private String hinh;
+
+    @Column(name = "dia_chi", length = 255)
+    private String diaChi;
 }

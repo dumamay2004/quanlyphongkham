@@ -40,9 +40,6 @@ public class BenhNhan {
     @Column(name = "hinh")
     private String hinh;
 
-    @Column(name = "bao_hiem")
-    private String baoHiem;
-
     @Column(name = "tinh_tp")
     private String tinhTp;
 

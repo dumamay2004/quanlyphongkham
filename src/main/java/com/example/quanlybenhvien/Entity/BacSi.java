@@ -11,12 +11,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "NHANVIEN")
+@Table(name = "BACSI")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NhanVien {
-    @Id
+public class BacSi {
+@Id
     @Column(name = "ma_nhan_vien")
     private String maNhanVien;
 
@@ -48,4 +48,7 @@ public class NhanVien {
     @JoinColumn(name = "vai_tro", referencedColumnName = "ma_vai_tro")
     private Vaitro vaiTro;
 
+    @ManyToOne
+    @JoinColumn(name = "chuyen_khoa", referencedColumnName = "ma_chuyen_khoa")
+    private ChuyenKhoa chuyenKhoa;
 }

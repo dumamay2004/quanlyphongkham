@@ -69,7 +69,6 @@ public class BenhNhanService {
         existingBenhNhan.setEmail(benhNhan.getEmail());
         existingBenhNhan.setMatKhau(benhNhan.getMatKhau());
         existingBenhNhan.setHinh(benhNhan.getHinh());
-        existingBenhNhan.setBaoHiem(benhNhan.getBaoHiem());
         existingBenhNhan.setTinhTp(benhNhan.getTinhTp());
         existingBenhNhan.setQuanHuyen(benhNhan.getQuanHuyen());
         existingBenhNhan.setDuong(benhNhan.getDuong());
