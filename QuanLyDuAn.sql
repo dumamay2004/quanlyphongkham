@@ -31,7 +31,7 @@ CREATE TABLE CHUYENKHOA (
     ma_chuyen_khoa VARCHAR(20) NOT NULL PRIMARY KEY,
     ten_chuyen_khoa NVARCHAR(255) NOT NULL
 );
-
+ALTER TABLE CHUYENKHOA ADD hinh nvarchar(255) ;
 -- Tạo bảng nhân viên
 CREATE TABLE BACSI (
     ma_bac_si VARCHAR(20) NOT NULL PRIMARY KEY,
