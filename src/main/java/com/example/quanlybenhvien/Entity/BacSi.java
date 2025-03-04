@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BacSi {
 @Id
-    @Column(name = "ma_nhan_vien")
-    private String maNhanVien;
+    @Column(name = "ma_bai_si")
+    private String maBacSi;
 
     @Column(name = "ho_ten")
     private String hoTen;

@@ -28,5 +28,5 @@ public class ChuyenKhoa {
     private String hinh;
 
     @OneToMany(mappedBy = "chuyenKhoa")
-    private List<NhanVien> nhanvien;
+    private List<BacSi> bacSi;
 }

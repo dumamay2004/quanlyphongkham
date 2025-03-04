@@ -79,6 +79,7 @@ public class VaiTroController {
             return "redirect:/nguoidung/trangchu/vaitro";
         }
         vaiTroService.deleteVaiTro(maVaiTro);
+        redirectAttributes.addFlashAttribute("successMessage", "xóa vai trò thành công!");
         return "redirect:/nguoidung/trangchu/vaitro";
     }
 

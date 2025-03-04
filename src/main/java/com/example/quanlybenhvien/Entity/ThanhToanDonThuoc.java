@@ -1,6 +1,5 @@
 package com.example.quanlybenhvien.Entity;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 
 import jakarta.persistence.Column;
