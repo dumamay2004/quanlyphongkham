@@ -2,6 +2,7 @@ package com.example.quanlybenhvien.Entity;
 
 
 import java.util.Date;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -50,4 +51,7 @@ public class BenhNhan {
     private String duong;
     @Transient
     private String nhapLaiMatKhau;
+
+    @OneToMany(mappedBy = "benhNhan", cascade = CascadeType.ALL)
+    private List<BenhAn> danhSachBenhAn;
 }

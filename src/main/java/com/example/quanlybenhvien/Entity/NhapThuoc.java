@@ -23,22 +23,25 @@ public class NhapThuoc {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ma_nhap_thuoc")
-    private Long id;
+    private Integer maNhapThuoc; // Mã nhập thuốc (Primary Key, tự động tăng)
 
     @ManyToOne
     @JoinColumn(name = "ma_nhan_vien", nullable = false)
-    private NhanVien nhanVien;
+    private NhanVien nhanVien; // Nhân viên nhập thuốc (FK -> NHANVIEN)
 
     @ManyToOne
     @JoinColumn(name = "ma_thuoc", nullable = false)
-    private Thuoc thuoc;
+    private Thuoc thuoc; // Thuốc được nhập (FK -> THUOC)
 
     @Column(name = "so_luong_nhap", nullable = false)
-    private Integer soLuongNhap;
+    private Integer soLuongNhap; // Số lượng nhập (phải > 0)
 
     @Column(name = "ngay_nhap", nullable = false)
-    private LocalDate ngayNhap = LocalDate.now();
+    private LocalDate ngayNhap; // Ngày nhập thuốc (mặc định GETDATE)
+
+    @Column(name = "nha_cung_cap", nullable = false, length = 255)
+    private String nhaCungCap; // Nhà cung cấp thuốc
 
     @Column(name = "ghi_chu", length = 255)
-    private String ghiChu;
+    private String ghiChu; // Ghi chú (nếu có)
 }

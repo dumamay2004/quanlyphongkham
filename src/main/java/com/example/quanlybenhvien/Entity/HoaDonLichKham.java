@@ -1,12 +1,15 @@
 package com.example.quanlybenhvien.Entity;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -18,25 +21,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "THANHTOAN")
-public class ThanhToan {
+@Table(name = "HOADON")
+public class HoaDonLichKham {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ma_thanh_toan")
-    private Integer maThanhToan;
+    @Column(name = "ma_hoa_don")
+    private Integer maHoaDon;
 
-    @Column(name = "ma_lich_kham", nullable = false)
-    private Integer maLichKham;
+    @OneToOne
+    @JoinColumn(name = "ma_lich_kham", nullable = false, unique = true)
+    private LichKham lichKham;
 
     @Column(name = "ngay_thanh_toan", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date ngayThanhToan;
-
-    @Column(name = "bao_hiem_ho_tro", nullable = false)
-    private Double baoHiemHoTro;  // Đổi BigDecimal -> Double và bỏ precision/scale
-
-    @Column(name = "so_tien_phai_tra", nullable = false)
-    private Double soTienPhaiTra;
+    private LocalDate ngayThanhToan;
 
     @Column(name = "tong_tien", nullable = false)
     private Double tongTien;

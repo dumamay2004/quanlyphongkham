@@ -1,8 +1,13 @@
 package com.example.quanlybenhvien.Entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -16,4 +21,13 @@ public class Vaitro {
 
     @Column(name = "ten_vai_tro")
     private String tenVaiTro;
+
+    @OneToMany(mappedBy = "vaiTro", cascade = CascadeType.ALL)
+    private List<BacSi> bacSiList;
+
+    @OneToMany(mappedBy = "vaiTro", cascade = CascadeType.ALL)
+    private List<NhanVien> nhanVienList;
+
+    @OneToOne (mappedBy = "vaiTro", cascade = CascadeType.ALL)
+    private QuanLy quanLy;
 }

@@ -134,7 +134,7 @@
                         </div>
                     </div>
                     <div>
-                        <form th:action="@{/nguoidung/trangchu/vaitro/timkiem}" method="get" class="mb-4">
+                        <form th:action="@{/quanly/trangchu/vaitro/timkiem}" method="get" class="mb-4">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="keyword" th:value="${keyword}"
                                     placeholder="Tìm kiếm vai trò">
@@ -144,7 +144,7 @@
                     </div>
                     <!-- Form nhập vai trò -->
                     <div class="col-md-6">
-                        <form th:action="@{/nguoidung/trangchu/vaitro}" method="post" class="mb-4">
+                        <form th:action="@{/quanly/trangchu/vaitro}" method="post" class="mb-4">
                             <div class="mb-3">
                                 <label class="form-label">Mã Vai Trò</label>
                                 <input type="text" class="form-control" name="maVaiTro" th:value="${vaitro.maVaiTro}">
@@ -160,7 +160,7 @@
                             <button type="submit" class="btn btn-primary"
                                 th:text="${vaitro != null and vaitro.maVaiTro != null} ? 'Cập Nhật' : 'Thêm'">
                             </button>
-                            <a th:href="@{/nguoidung/trangchu/vaitro}" class="btn btn-secondary">Reset</a>
+                            <a th:href="@{/quanly/trangchu/vaitro}" class="btn btn-secondary">Reset</a>
                         </form>
                     </div>
 
@@ -179,9 +179,9 @@
                                     <td th:text="${vt.maVaiTro}"></td>
                                     <td th:text="${vt.tenVaiTro}"></td>
                                     <td>
-                                        <a th:href="@{/nguoidung/trangchu/vaitro/edit/{maVaiTro}(maVaiTro=${vt.maVaiTro})}"
+                                        <a th:href="@{/quanly/trangchu/vaitro/edit/{maVaiTro}(maVaiTro=${vt.maVaiTro})}"
                                             class="btn btn-warning btn-sm">Sửa</a>
-                                        <a th:href="@{/nguoidung/trangchu/vaitro/delete/{maVaiTro}(maVaiTro=${vt.maVaiTro})}"
+                                        <a th:href="@{/quanly/trangchu/vaitro/delete/{maVaiTro}(maVaiTro=${vt.maVaiTro})}"
                                             class="btn btn-danger btn-sm"
                                             onclick="return confirm('Bạn có chắc chắn muốn xóa vai trò này?')">Xóa</a>
                                     </td>

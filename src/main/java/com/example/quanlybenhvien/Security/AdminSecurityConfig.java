@@ -22,19 +22,19 @@ public class AdminSecurityConfig {
     @Bean
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/nguoidung/**","/api/**","/js/**") // Chỉ áp dụng cho "/admin/**"
+            .securityMatcher("/quanly/**","/api/**","/js/**") // Chỉ áp dụng cho "/admin/**"
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/nguoidung/**","/api/**").hasRole("VT00") // Chỉ ADMIN mới vào được
+                .requestMatchers("/quanly/**","/api/**").hasRole("VT00") // Chỉ ADMIN mới vào được
                 .anyRequest().authenticated())
             .formLogin(form -> form
-                .loginPage("/nguoidung/login") // Trang đăng nhập riêng cho admin
-                .loginProcessingUrl("/nguoidung/login")
-                .defaultSuccessUrl("/nguoidung/trangchu", true) // Sau khi đăng nhập thành công chuyển vào "/admin/home"
-                .failureUrl("/nguoidung/login?error=true")
+                .loginPage("/quanly/login") // Trang đăng nhập riêng cho admin
+                .loginProcessingUrl("/quanly/login")
+                .defaultSuccessUrl("/quanly/trangchu", true) // Sau khi đăng nhập thành công chuyển vào "/admin/home"
+                .failureUrl("/quanly/login?error=true")
                 .permitAll())
             .logout(logout -> logout
-                .logoutUrl("/nguoidung/logout") // Đăng xuất dành riêng cho admin
-                .logoutSuccessUrl("/nguoidung/login?logout=true")
+                .logoutUrl("/quanly/logout") // Đăng xuất dành riêng cho admin
+                .logoutSuccessUrl("/quanly/login?logout=true")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true))
             .csrf(csrf -> csrf.disable());

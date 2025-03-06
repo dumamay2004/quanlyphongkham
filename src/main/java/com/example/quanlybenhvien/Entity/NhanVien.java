@@ -1,10 +1,14 @@
 package com.example.quanlybenhvien.Entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -43,9 +47,12 @@ public class NhanVien {
 
     @Column(name = "hinh")
     private String hinh;
-
+    
     @ManyToOne
     @JoinColumn(name = "vai_tro", referencedColumnName = "ma_vai_tro")
     private Vaitro vaiTro;
+
+    @OneToMany(mappedBy = "nhanVien", cascade = CascadeType.ALL)
+    private List<NhapThuoc> danhSachNhapThuoc;
 
 }

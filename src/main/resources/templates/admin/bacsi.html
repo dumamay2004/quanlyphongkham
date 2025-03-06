@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Bác Sĩ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+   
+
+    <div th:replace="~{admin/navbar :: navbar}"></div>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div th:replace="~{admin/menu :: menu}"></div>
+
+
+
+        <!-- Main Content -->
+        <main class="content w-100">
+            <!-- Toast thông báo -->
+
+            <div class="container">
+                <h2 class="mt-4">Quản Lý Bác Sĩ</h2>
+        
+                <!-- Thông báo lỗi hoặc thành công -->
+                <div th:if="${emailError}" class="alert alert-danger" th:text="${emailError}"></div>
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+                <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        
+                <!-- Form nhập thông tin bác sĩ -->
+                <form th:action="@{${isEdit} ? '/quanly/trangchu/bacsi/update' : '/quanly/trangchu/bacsi/add'}" th:object="${bacsi}" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mã Bác Sĩ</label>
+                            <input type="text" class="form-control" th:field="*{maBacSi}" th:readonly="${isEdit}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Họ Tên</label>
+                            <input type="text" class="form-control" th:field="*{hoTen}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mật Khẩu</label>
+                            <input type="text" class="form-control" th:field="*{matKhau}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">SĐT</label>
+                            <input type="text" class="form-control" th:field="*{sdt}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" th:field="*{email}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Địa Chỉ</label>
+                            <input type="text" class="form-control" th:field="*{diachi}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Chuyên Khoa</label>
+                            <select class="form-select" th:field="*{chuyenKhoa}" required>
+                                <option th:each="ck : ${dsChuyenKhoa}" th:value="${ck.maChuyenKhoa}" th:text="${ck.tenChuyenKhoa}"></option>
+                            </select>
+                        </div>
+                        <!-- <div class="col-md-6 mb-3">
+                            <label class="form-label">Chức Vụ</label>
+                            <select class="form-select" th:field="*{chucvu}" required>
+                                <option value="Trưởng khoa">Trưởng khoa</option>
+                                <option value="Phó khoa">Phó khoa</option>
+                                <option value="Bác sĩ">Bác sĩ</option>
+                            </select>
+                        </div> -->
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">CCCD</label>
+                            <input type="text" class="form-control" th:field="*{cccd}" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Vai Trò</label>
+                            <select class="form-select" th:field="*{vaitro}" required>
+                                <option value="BACSI">Bác sĩ</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Hình Ảnh</label>
+                            <input type="file" class="form-control" name="file">
+                            <div th:if="${bacsi.hinh}" class="mt-2">
+                                <img th:src="@{/images/{images}(images=${bacsi.hinh})}" alt="Hình bác sĩ" width="100">
+                            </div>
+                            <div th:if="${bacsi.hinh == null}" class="mt-2">
+                                <p>Chưa có hình ảnh</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-warning">[[${isEdit} ? 'Cập nhật' : 'Thêm mới']]</button>
+                        <a th:href="@{/quanly/trangchu/bacsi}" class="btn btn-secondary">Reset</a>
+                    </div>
+                </form>
+        
+        
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <h3 class="m-0">Danh Sách Bác Sĩ</h3>
+                    <form th:action="@{/quanly/trangchu/bacsi/search}" method="get" class="d-flex">
+                        <div class="input-group shadow-sm">
+                            <input type="text" class="form-control rounded-pill ps-3" 
+                                name="keyword" placeholder="Tìm kiếm bác sĩ..." th:value="${keyword}">
+                            <button class="btn btn-success rounded-pill ms-2 px-4" type="submit">Tìm</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Mã Bác Sĩ</th>
+                            <th>Họ Tên</th>
+                            <th>Mật Khẩu</th>
+                            <th>Địa Chỉ</th>
+                            <th>SĐT</th>
+                            <th>CCCD</th>
+                            <th>Email</th>
+                            <th>Chuyên Khoa</th>
+                            <th>Chức Vụ</th>
+                            <th>Vai Trò</th>
+                            <th>Hình Ảnh</th>
+                            <th>Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="bacsi : ${dsBacSi}">
+                            <td th:text="${bacsi.maBacSi}"></td>
+                            <td th:text="${bacsi.hoTen}"></td>
+                            <td th:text="${bacsi.matKhau}"></td>
+                            <td th:text="${bacsi.diaChi}"></td>
+                            <td th:text="${bacsi.sdt}"></td>
+                            <td th:text="${bacsi.cccd}"></td>
+                            <td th:text="${bacsi.email}"></td>
+                            <td th:text="${bs.chuyenKhoa != null ? bs.chuyenKhoa.tenChuyenKhoa : 'Không có'}"></td>ss
+                            <td th:text="${bacsi.vaiTro != null ? bacsi.vaiTro.tenVaiTro : 'Không có'}"></td>
+                            <td>
+                                <img th:src="@{/images/{filename}(filename=${bacsi.hinh})}" alt="Hình bác sĩ" class="img-thumbnail" width="100">
+                            </td>
+                            <td style="white-space: nowrap; text-align: center; vertical-align: middle;">
+                                <a th:href="@{/quanly/trangchu/bacsi/edit/{id}(id=${bacsi.maBS})}" class="btn btn-primary btn-sm">Sửa</a>
+                                <a th:href="@{/quanly/trangchu/bacsi/delete/{id}(id=${bacsi.maBS})}" class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                            </td>
+                            
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

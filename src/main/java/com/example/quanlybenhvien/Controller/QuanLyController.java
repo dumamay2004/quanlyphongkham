@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
-@RequestMapping("/nguoidung/trangchu")
+@RequestMapping("/quanly/trangchu")
 public class QuanLyController {
     @Autowired
     QuanLyDao quanLyDao;
@@ -43,7 +43,7 @@ public class QuanLyController {
         }
 
         quanLyService.saveQuanLy(quanLy);
-        return "redirect:/nguoidung/trangchu/quanly";
+        return "redirect:/quanly/trangchu/quanly";
     }
     
 }

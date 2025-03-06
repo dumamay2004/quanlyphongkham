@@ -27,6 +27,9 @@ public class ChuyenKhoa {
     @Column(name = "hinh")
     private String hinh;
 
+    @Column(name = "so_luong")
+    private String soLuong;
+
     @OneToMany(mappedBy = "chuyenKhoa")
-    private List<BacSi> bacSi;
+    private List<BacSi> nhanVien;
 }

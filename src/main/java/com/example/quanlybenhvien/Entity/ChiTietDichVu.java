@@ -24,8 +24,5 @@ public class ChiTietDichVu {
 
     @Column(name = "soluong", nullable = false)
     private Integer soLuong;
-
-    @Column(name = "tong_tien", nullable = false)
-    private Double tongTien;
 }
 

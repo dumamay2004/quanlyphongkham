@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-@RequestMapping("/nguoidung/trangchu")
+@RequestMapping("/quanly/trangchu")
 public class VaiTroController {
     @Autowired
     VaiTroService vaiTroService;
@@ -54,7 +54,7 @@ public class VaiTroController {
         }
 
         vaiTroService.saveVaiTro(vaitro);
-        return "redirect:/nguoidung/trangchu/vaitro";
+        return "redirect:/quanly/trangchu/vaitro";
     }
 
     // Sửa vai trò (Load dữ liệu lên form)
@@ -76,11 +76,11 @@ public class VaiTroController {
         String vaitro = "VT00";
         if (maVaiTro.equals(vaitro)) {
             redirectAttributes.addFlashAttribute("errorMessage", "Không được phép xóa vai trò này!");
-            return "redirect:/nguoidung/trangchu/vaitro";
+            return "redirect:/quanly/trangchu/vaitro";
         }
         vaiTroService.deleteVaiTro(maVaiTro);
         redirectAttributes.addFlashAttribute("successMessage", "xóa vai trò thành công!");
-        return "redirect:/nguoidung/trangchu/vaitro";
+        return "redirect:/quanly/trangchu/vaitro";
     }
 
     @GetMapping("/vaitro/timkiem")

@@ -14,7 +14,7 @@ public class AdminController {
     @Autowired
     QuanLyService nguoiDungService;
 
-    @GetMapping("/nguoidung/login")
+    @GetMapping("/quanly/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
             Model model) {
@@ -27,7 +27,7 @@ public class AdminController {
         return "admin/admin-login";
     }
 
-    @GetMapping("/nguoidung/trangchu")
+    @GetMapping("/quanly/trangchu")
     public String showAdminHome() {
         return "admin/admin";
     }

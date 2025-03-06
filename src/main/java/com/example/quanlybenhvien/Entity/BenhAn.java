@@ -34,7 +34,7 @@ public class BenhAn {
 
     @ManyToOne
     @JoinColumn(name = "ma_bac_si")
-    private NhanVien bacSi;
+    private BacSi bacSi;
 
     @Column(name = "ngay_kham")
     private Date ngayKham;

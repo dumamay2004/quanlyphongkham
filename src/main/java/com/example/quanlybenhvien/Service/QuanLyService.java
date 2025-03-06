@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.quanlybenhvien.Dao.QuanLyDao;
 import com.example.quanlybenhvien.Entity.QuanLy;
-import com.example.quanlybenhvien.Entity.Vaitro;
 
 import jakarta.transaction.Transactional;
 

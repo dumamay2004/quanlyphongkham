@@ -29,9 +29,11 @@ CREATE TABLE QUANLY
 -- Tạo bảng chuyên khoa
 CREATE TABLE CHUYENKHOA (
     ma_chuyen_khoa VARCHAR(20) NOT NULL PRIMARY KEY,
-    ten_chuyen_khoa NVARCHAR(255) NOT NULL
+    ten_chuyen_khoa NVARCHAR(255) NOT NULL,
+	hinh NVARCHAR(255),
+	so_luong INT NOT NULL DEFAULT 0
 );
-ALTER TABLE CHUYENKHOA ADD hinh nvarchar(255) ;
+
 -- Tạo bảng nhân viên
 CREATE TABLE BACSI (
     ma_bac_si VARCHAR(20) NOT NULL PRIMARY KEY,
@@ -44,11 +46,11 @@ CREATE TABLE BACSI (
     email VARCHAR(255) NOT NULL UNIQUE,
     hinh NVARCHAR(255) NOT NULL,
     vai_tro VARCHAR(20) NOT NULL,
-    chuyen_khoa VARCHAR(20) NULL,
+	chuyen_khoa varchar(20) null,
+	ghi_chu nvarchar(250) not null,
+	FOREIGN KEY (chuyen_khoa) REFERENCES CHUYENKHOA(ma_chuyen_khoa),
     FOREIGN KEY (vai_tro) REFERENCES VAITRO(ma_vai_tro),
-    FOREIGN KEY (chuyen_khoa) REFERENCES CHUYENKHOA(ma_chuyen_khoa)
 );
--- Tạo bảng nhân viên
 CREATE TABLE NHANVIEN (
     ma_nhan_vien VARCHAR(20) NOT NULL PRIMARY KEY,
     ho_ten NVARCHAR(255) NOT NULL,
@@ -60,9 +62,9 @@ CREATE TABLE NHANVIEN (
     email VARCHAR(255) NOT NULL UNIQUE,
     hinh NVARCHAR(255) NOT NULL,
     vai_tro VARCHAR(20) NOT NULL,
+	ghi_chu nvarchar(250) not null,
     FOREIGN KEY (vai_tro) REFERENCES VAITRO(ma_vai_tro),
 );
-
 -- Tạo bảng bệnh nhân
 CREATE TABLE BENHNHAN (
     ma_benh_nhan int identity(1,1) PRIMARY KEY,
@@ -89,7 +91,7 @@ CREATE TABLE BENHAN (
     dieu_tri NVARCHAR(255) NOT NULL,
     ghi_chu NVARCHAR(255) NOT NULL,
     FOREIGN KEY (ma_benh_nhan) REFERENCES BENHNHAN(ma_benh_nhan),
-    FOREIGN KEY (ma_bac_si) REFERENCES NHANVIEN(ma_nhan_vien)
+    FOREIGN KEY (ma_bac_si) REFERENCES BACSI(ma_bac_si)
 );
 
 -- Tạo bảng dịch vụ
@@ -105,16 +107,16 @@ CREATE TABLE LICHKHAM (
     ma_lich_kham int identity(1,1) PRIMARY KEY,
     ma_benh_nhan int NOT NULL,
     ma_nhan_vien VARCHAR(20) NOT NULL,
-    ma_dich_vu VARCHAR(20) NOT NULL,
     ma_chuyen_khoa VARCHAR(20) NOT NULL,
+	ma_bac_si varchar(20) NULL,
     ngay_kham DATE NOT NULL,
-    gio_kham DATETIME NOT NULL,
+    gio_kham TIME  NOT NULL,
     trang_thai NVARCHAR(50) NOT NULL,
     ghi_chu NVARCHAR(255) NOT NULL,
     FOREIGN KEY (ma_benh_nhan) REFERENCES BENHNHAN(ma_benh_nhan),
     FOREIGN KEY (ma_nhan_vien) REFERENCES NHANVIEN(ma_nhan_vien),
-    FOREIGN KEY (ma_dich_vu) REFERENCES DICHVU(ma_dich_vu),
-    FOREIGN KEY (ma_chuyen_khoa) REFERENCES CHUYENKHOA(ma_chuyen_khoa)
+    FOREIGN KEY (ma_chuyen_khoa) REFERENCES CHUYENKHOA(ma_chuyen_khoa),
+	FOREIGN KEY (ma_bac_si) REFERENCES BACSI(ma_bac_si),
 );
 
 -- Tạo bảng chi tiết dịch vụ
@@ -123,81 +125,107 @@ CREATE TABLE CHITIETDICHVU (
     ma_lich_kham int NOT NULL,
     ma_dich_vu VARCHAR(20) NOT NULL,
     soluong INT NOT NULL,
-    tong_tien DECIMAL(10,2) NOT NULL,
     FOREIGN KEY (ma_lich_kham) REFERENCES LICHKHAM(ma_lich_kham),
     FOREIGN KEY (ma_dich_vu) REFERENCES DICHVU(ma_dich_vu)
 );
 
--- Tạo bảng đơn thuốc
-CREATE TABLE DONTHUOC (
-    ma_don_thuoc int identity(1,1) PRIMARY KEY,
-    ma_benh_an int NOT NULL,
-    nhan_vien VARCHAR(20) NOT NULL,
-    ngay_lap DATE NOT NULL,
-    FOREIGN KEY (ma_benh_an) REFERENCES BENHAN(ma_benh_an),
-    FOREIGN KEY (nhan_vien) REFERENCES NHANVIEN(ma_nhan_vien)
-);
-
--- Tạo bảng thuốc
+-- Tạo bảng hóa đơn 
+CREATE TABLE HOADON (
+    ma_hoa_don INT IDENTITY(1,1) PRIMARY KEY,
+    ma_lich_kham INT NOT NULL UNIQUE,
+    ngay_thanh_toan DATE NOT NULL,
+    tong_tien DECIMAL(10,2) NOT NULL,
+    hinh_thuc NVARCHAR(100) NOT NULL,
+    trang_thai NVARCHAR(50) NOT NULL DEFAULT 'Chưa thanh toán',
+    FOREIGN KEY (ma_lich_kham) REFERENCES LICHKHAM(ma_lich_kham),
+); 
+-- Bảng THUOC (Danh sách thuốc)
 CREATE TABLE THUOC (
     ma_thuoc VARCHAR(20) NOT NULL PRIMARY KEY,
     ten_thuoc NVARCHAR(255) NOT NULL,
     mo_ta NVARCHAR(255) NOT NULL,
-    gia_thuoc DECIMAL(10,2) NOT NULL,
     don_vi NVARCHAR(50) NOT NULL,
-    han_su_dung DATE NOT NULL,
-    nhan_vien VARCHAR(20) NOT NULL,
-	so_luong_hien_co INT NOT NULL,
-    FOREIGN KEY (nhan_vien) REFERENCES NHANVIEN(ma_nhan_vien)
+    gia_thuoc DECIMAL(10,2) NOT NULL CHECK (gia_thuoc >= 0),
+    han_su_dung DATE NOT NULL CHECK (han_su_dung > GETDATE())
+); 
+
+-- Bảng DONTHUOC (Đơn thuốc)
+CREATE TABLE DONTHUOC (
+    ma_don_thuoc INT IDENTITY(1,1) PRIMARY KEY,
+    ma_benh_an INT NOT NULL,
+    ma_bac_si VARCHAR(20) NOT NULL,
+    ngay_lap DATETIME NOT NULL DEFAULT GETDATE(),
+    FOREIGN KEY (ma_benh_an) REFERENCES BENHAN(ma_benh_an) ON DELETE CASCADE,
+    FOREIGN KEY (ma_bac_si) REFERENCES BACSI(ma_bac_si) ON DELETE CASCADE
 );
+
+-- Bảng KHO_THUOC (Số lượng thuốc trong kho)
+CREATE TABLE KHO_THUOC (
+    ma_thuoc VARCHAR(20) PRIMARY KEY,
+    so_luong_hien_co INT NOT NULL DEFAULT 0 CHECK (so_luong_hien_co >= 0),
+    FOREIGN KEY (ma_thuoc) REFERENCES THUOC(ma_thuoc) ON DELETE CASCADE
+);
+
+-- Bảng NHAPTHUOC (Nhập thuốc vào kho)
 CREATE TABLE NHAPTHUOC (
     ma_nhap_thuoc INT IDENTITY(1,1) PRIMARY KEY,
     ma_nhan_vien VARCHAR(20) NOT NULL,
-	ma_thuoc VARCHAR(20) NOT NULL,
-    so_luong_nhap INT NOT NULL,
+    ma_thuoc VARCHAR(20) NOT NULL,
+    so_luong_nhap INT NOT NULL CHECK (so_luong_nhap > 0),
     ngay_nhap DATE NOT NULL DEFAULT GETDATE(),
+    nha_cung_cap NVARCHAR(255) NOT NULL,
     ghi_chu NVARCHAR(255),
     FOREIGN KEY (ma_nhan_vien) REFERENCES NHANVIEN(ma_nhan_vien) ON DELETE CASCADE,
     FOREIGN KEY (ma_thuoc) REFERENCES THUOC(ma_thuoc) ON DELETE CASCADE
 );
 
--- Tạo bảng chi tiết đơn thuốc
+-- Bảng CHITIETDONTHUOC (Chi tiết đơn thuốc)
 CREATE TABLE CHITIETDONTHUOC (
-	ma_chi_tiet_dt int identity(1,1) primary key,
-    ma_don_thuoc int NOT NULL,
+    ma_chi_tiet_dt INT IDENTITY(1,1) PRIMARY KEY,
+    ma_don_thuoc INT NOT NULL,
     ma_thuoc VARCHAR(20) NOT NULL,
-    soluong INT NOT NULL,
+    soluong INT NOT NULL CHECK (soluong > 0),
     lieu_luong NVARCHAR(100) NOT NULL,
-    FOREIGN KEY (ma_don_thuoc) REFERENCES DONTHUOC(ma_don_thuoc),
-    FOREIGN KEY (ma_thuoc) REFERENCES THUOC(ma_thuoc)
+    FOREIGN KEY (ma_don_thuoc) REFERENCES DONTHUOC(ma_don_thuoc) ON DELETE CASCADE,
+    FOREIGN KEY (ma_thuoc) REFERENCES THUOC(ma_thuoc) ON DELETE CASCADE
 );
 
--- Tạo bảng thanh toán
-CREATE TABLE HOANDON (
-    ma_thanh_toan int identity(1,1) PRIMARY KEY,
-    ma_lich_kham int NOT NULL UNIQUE,
-    ngay_thanh_toan DATE NOT NULL,
-    so_tien_phai_tra DECIMAL(10,2) NOT NULL,
-    tong_tien DECIMAL(10,2) NOT NULL,
-    hinh_thuc NVARCHAR(100) NOT NULL,
-    trang_thai NVARCHAR(50) NOT NULL,
-    FOREIGN KEY (ma_lich_kham) REFERENCES LICHKHAM(ma_lich_kham)
-);
-
--- Tạo bảng thanh toán đơn thuốc
+-- Bảng HÓA ĐƠN
 CREATE TABLE HOADON_DONTHUOC (
-    ma_thanh_toan_dt int identity(1,1) NOT NULL PRIMARY KEY,
-    ma_don_thuoc int NOT NULL,
-    ngay_thanh_toan DATE NOT NULL,
-    bao_hiem_ho_tro DECIMAL(10,2) NOT NULL,
-    so_tien_phai_tra DECIMAL(10,2) NOT NULL,
-    tong_tien DECIMAL(10,2) NOT NULL,
+    ma_hoa_don INT IDENTITY(1,1) PRIMARY KEY,
+	ma_benh_nhan INT NOT NULL,
+    ngay_thanh_toan DATE NOT NULL DEFAULT GETDATE(),
     hinh_thuc NVARCHAR(100) NOT NULL,
     trang_thai NVARCHAR(50) NOT NULL,
-    FOREIGN KEY (ma_don_thuoc) REFERENCES DONTHUOC(ma_don_thuoc)
+	FOREIGN KEY (ma_benh_nhan) REFERENCES BENHNHAN(ma_benh_nhan) ON DELETE CASCADE
 );
 
----------------------------------------------------------------insert vô bảng -------------------------------------------------------------------------
+-- Bảng CHI TIẾT HÓA ĐƠN ĐƠN THUỐC (Quan hệ nhiều - nhiều giữa HÓA ĐƠN và ĐƠN THUỐC)
+CREATE TABLE HOADON_CHITIET_DONTHUOC (
+    ma_chi_tiet_hd INT IDENTITY(1,1) PRIMARY KEY,
+    ma_hoa_don INT NOT NULL,
+    ma_don_thuoc INT NOT NULL,
+    tong_tien DECIMAL(10,2) NOT NULL CHECK (tong_tien >= 0),
+    FOREIGN KEY (ma_hoa_don) REFERENCES HOADON_DONTHUOC(ma_hoa_don) ON DELETE CASCADE,
+    FOREIGN KEY (ma_don_thuoc) REFERENCES DONTHUOC(ma_don_thuoc) ON DELETE CASCADE
+);
+CREATE TABLE LICHSUTHANHTOAN (
+    ma_lich_su INT IDENTITY(1,1) PRIMARY KEY,
+	ma_benh_nhan int NOT NULL,
+    ma_hoa_don INT NOT NULL,
+	ma_hoa_don_donthuoc int NULL,
+    ma_dich_vu VARCHAR(20) NOT NULL,
+    ngay_su_dung DATETIME NOT NULL DEFAULT GETDATE(),
+    so_luong INT NOT NULL CHECK (so_luong > 0),
+    thanh_tien DECIMAL(10,2) NOT NULL,
+    ghi_chu NVARCHAR(255) NULL,
+    FOREIGN KEY (ma_hoa_don) REFERENCES HOADON(ma_hoa_don),
+	FOREIGN KEY (ma_hoa_don_donthuoc) REFERENCES HOADON(ma_hoa_don),
+	FOREIGN KEY (ma_benh_nhan) REFERENCES BENHNHAN(ma_benh_nhan),
+    FOREIGN KEY (ma_dich_vu) REFERENCES DICHVU(ma_dich_vu)
+);
+
+-------------------------------------------------------------insert vô bảng -------------------------------------------------------------------------
 -- insert từng cái 1 đừng kéo 1 lần insert hết là lỗi
 -- Bảng VAITRO
 INSERT INTO VAITRO (ma_vai_tro, ten_vai_tro) VALUES
@@ -212,10 +240,31 @@ VALUES ('QL001', N'Võ Nguyễn Duy Tân', '123', 'a@gmail.com', '0987654321', '
 UPDATE QUANLY SET mat_khau = '$2a$10$RsgeqGNABvDJH6c1cCYHqetCYyat6y.cK3eMTPQBjRlLRj/NTJhRO' WHERE email = 'a@gmail.com';
 select * from quanly
 -- Bảng CHUYENKHOA
-INSERT INTO CHUYENKHOA (ma_chuyen_khoa, ten_chuyen_khoa) VALUES
-('CK01', N'Nội khoa'),
-('CK02', N'Ngoại khoa'),
-('CK03', N'Nhi khoa');
+INSERT INTO CHUYENKHOA (ma_chuyen_khoa, ten_chuyen_khoa, hinh, so_luong) VALUES
+('CK01', N'Nội Tổng Quát', 'noi_tong_quat.jpg', 0),
+('CK02', N'Ngoại Tổng Quát', 'ngoai_tong_quat.jpg', 0),
+('CK03', N'Nhi Khoa', 'nhi_khoa.jpg', 0),
+('CK04', N'Sản Phụ Khoa', 'san_phu_khoa.jpg', 0),
+('CK05', N'Răng Hàm Mặt', 'rang_ham_mat.jpg', 0),
+('CK06', N'Tai Mũi Họng', 'tai_mui_hong.jpg', 0),
+('CK07', N'Mắt', 'mat.jpg', 0),
+('CK08', N'Da Liễu', 'da_lieu.jpg', 0),
+('CK09', N'Thần Kinh', 'than_kinh.jpg', 0),
+('CK10', N'Tim Mạch', 'tim_mach.jpg', 0),
+('CK11', N'Nội Tiết', 'noi_tiet.jpg', 0),
+('CK12', N'Xương Khớp', 'xuong_khop.jpg', 0),
+('CK13', N'Hô Hấp', 'ho_hap.jpg', 0),
+('CK14', N'Tiêu Hóa', 'tieu_hoa.jpg', 0),
+('CK15', N'Y Học Cổ Truyền', 'y_hoc_co_truyen.jpg', 0);
+
+INSERT INTO BACSI (ma_bac_si, ho_ten, mat_khau, gioi_tinh, dia_chi, SDT, cccd, email, hinh, vai_tro, chuyen_khoa, ghi_chu) 
+VALUES 
+('BS001', N'Nguyễn Văn A', '123456', 'Nam', N'123 Lê Lợi, Hà Nội', '0987654321', '012345678901', 'nguyenvana@example.com', N'bs001.jpg', 'VT01', 'CK01', N'Bác sĩ chuyên khoa nội'),
+('BS002', N'Trần Thị B', 'abcdef', 'Nữ', N'45 Trần Hưng Đạo, TP.HCM', '0912345678', '023456789012', 'tranthib@example.com', N'bs002.jpg', 'VT02', 'CK02', N'Bác sĩ chuyên khoa ngoại'),
+('BS003', N'Lê Công C', 'pass789', 'Nam', N'78 Nguyễn Huệ, Đà Nẵng', '0933456789', '034567890123', 'lecongc@example.com', N'bs003.jpg', 'VT01', 'CK03', N'Bác sĩ chuyên khoa nhi'),
+('BS004', N'Phạm Hải D', 'qwerty', 'Nam', N'90 Lý Thường Kiệt, Hải Phòng', '0967890123', '045678901234', 'phamhayd@example.com', N'bs004.jpg', 'VT03', 'CK01', N'Bác sĩ chuyên khoa răng hàm mặt'),
+('BS005', N'Hoàng Minh E', 'xyz123', 'Nữ', N'12 Hoàng Diệu, Cần Thơ', '0978901234', '056789012345', 'hoangminhe@example.com', N'bs005.jpg', 'VT02', 'CK02', N'Bác sĩ chuyên khoa mắt');
+
 
 -- Bảng DICHVU
 INSERT INTO DICHVU (ma_dich_vu, ten_dich_vu, mo_ta, gia) VALUES

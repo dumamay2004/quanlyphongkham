@@ -1,6 +1,8 @@
 package com.example.quanlybenhvien.Entity;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,36 +22,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LichKham {
-    @Id
+     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ma_lich_kham")
     private Integer maLichKham;
 
     @ManyToOne
-    @JoinColumn(name = "ma_benh_nhan")
+    @JoinColumn(name = "ma_benh_nhan", nullable = false)
     private BenhNhan benhNhan;
 
     @ManyToOne
-    @JoinColumn(name = "ma_nhan_vien")
+    @JoinColumn(name = "ma_nhan_vien", nullable = false)
     private NhanVien nhanVien;
 
     @ManyToOne
-    @JoinColumn(name = "ma_dich_vu")
-    private DichVu dichVu;
-
-    @ManyToOne
-    @JoinColumn(name = "ma_chuyen_khoa")
+    @JoinColumn(name = "ma_chuyen_khoa", nullable = false)
     private ChuyenKhoa chuyenKhoa;
 
-    @Column(name = "ngay_kham")
-    private Date ngayKham;
+    @ManyToOne
+    @JoinColumn(name = "ma_bac_si")
+    private BacSi bacSi;
 
-    @Column(name = "gio_kham")
-    private Date gioKham;
+    @Column(name = "ngay_kham", nullable = false)
+    private LocalDate ngayKham;
 
-    @Column(name = "trang_thai")
+    @Column(name = "gio_kham", nullable = false)
+    private LocalTime gioKham;
+
+    @Column(name = "trang_thai", nullable = false)
     private String trangThai;
 
-    @Column(name = "ghi_chu")
+    @Column(name = "ghi_chu", nullable = false)
     private String ghiChu;
 }
