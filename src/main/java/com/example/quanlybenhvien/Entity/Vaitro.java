@@ -9,9 +9,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "VAITRO")
 public class Vaitro {
@@ -23,11 +28,14 @@ public class Vaitro {
     private String tenVaiTro;
 
     @OneToMany(mappedBy = "vaiTro", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<BacSi> bacSiList;
 
     @OneToMany(mappedBy = "vaiTro", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<NhanVien> nhanVienList;
 
-    @OneToOne (mappedBy = "vaiTro", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "vaiTro", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private QuanLy quanLy;
 }

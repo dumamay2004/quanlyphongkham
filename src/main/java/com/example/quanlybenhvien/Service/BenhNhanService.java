@@ -1,5 +1,7 @@
 package com.example.quanlybenhvien.Service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -79,5 +81,17 @@ public class BenhNhanService {
     public void deleteBenhNhan(Integer id)
     {
         benhNhanDao.deleteById(id);
+    }
+    public List<BenhNhan> getAllBenhNhans() {
+        return benhNhanDao.findAll();
+    }
+
+    // Tìm kiếm bệnh nhân theo tên
+    public List<BenhNhan> searchByKeyword(String keyword) {
+        return benhNhanDao.findByHoTenContainingIgnoreCase(keyword);
+    }
+ 
+    public void saveBenhNhan(BenhNhan benhNhan) {
+        benhNhanDao.save(benhNhan);
     }
 }

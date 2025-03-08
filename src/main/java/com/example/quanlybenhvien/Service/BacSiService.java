@@ -11,11 +11,11 @@ import com.example.quanlybenhvien.Entity.BacSi;
 
 @Service
 public class BacSiService {
-@Autowired
+    @Autowired
     private BacSiDao bacsiDao;
 
     // Lấy tất cả bác sĩ
-    public List<BacSi> getAllNhanVien() {
+    public List<BacSi> getAllBacSi() {
         return bacsiDao.findAll();
     }
 
@@ -26,8 +26,8 @@ public class BacSiService {
     // }
 
     // Lưu bác sĩ
-    public void save(BacSi nhanVien) {
-        bacsiDao.save(nhanVien);
+    public void save(BacSi bacSi) {
+        bacsiDao.save(bacSi);
     }
 
     // Tìm bác sĩ theo ID
@@ -41,21 +41,24 @@ public class BacSiService {
     }
 
     // Kiểm tra xem bác sĩ có tồn tại không theo ID
-    public boolean existsById(String id) {
-        return bacsiDao.existsById(id);
-    }
-
-    // Kiểm tra bác sĩ có tồn tại không theo tên
-    public boolean existsByHotenNV(String hoTen) {
-        return bacsiDao.existsByhoTen(hoTen);
-    }
-
-    // Tìm bác sĩ theo tên
-    public List<BacSi> searchByName(String keyword) {
-        return bacsiDao.findByhoTenContainingIgnoreCase(keyword);
+    public boolean existsById(String maBacSi) {
+        return bacsiDao.existsByMaBacSi(maBacSi);
     }
 
     public boolean existsByEmail(String email) {
         return bacsiDao.existsByEmail(email);
+    }
+
+    public boolean existsByCccd(String cccd) {
+        return bacsiDao.existsByCccd(cccd);
+    }
+
+    public boolean existsBySdt(String sdt) {
+        return bacsiDao.existsBySdt(sdt);
+    }
+
+    // Tìm bác sĩ theo tên
+    public List<BacSi> searchByName(String keyword) {
+        return bacsiDao.findByHoTenContainingIgnoreCase(keyword);
     }
 }

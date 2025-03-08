@@ -10,10 +10,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "BACSI")
 public class BacSi {
     @Id
@@ -49,15 +54,19 @@ public class BacSi {
 
     @ManyToOne
     @JoinColumn(name = "chuyen_khoa")
+    @ToString.Exclude
     private ChuyenKhoa chuyenKhoa;
 
     @ManyToOne
     @JoinColumn(name = "vai_tro")
+    @ToString.Exclude
     private Vaitro vaiTro;
 
     @OneToMany(mappedBy = "bacSi", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<BenhAn> danhSachBenhAn;
-    
+
     @OneToMany(mappedBy = "bacSi", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<DonThuoc> danhSachDonThuoc;
 }

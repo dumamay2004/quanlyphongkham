@@ -8,17 +8,18 @@ import org.springframework.stereotype.Repository;
 
 import com.example.quanlybenhvien.Entity.BacSi;
 
-
-
 @Repository
-public interface BacSiDao extends JpaRepository<BacSi,String>{
+public interface BacSiDao extends JpaRepository<BacSi, String> {
     Optional<BacSi> findByhoTen(String hoTen); // Tìm bác sĩ theo họ tên
 
-    boolean existsById(@SuppressWarnings("null") String id); // Kiểm tra mã bác sĩ có tồn tại không
+    boolean existsByMaBacSi(String maBacSi);
 
     boolean existsByEmail(String email);
 
-    boolean existsByhoTen(String hoTen); // Kiểm tra tên bác sĩ có tồn tại không
+    boolean existsByCccd(String cccd);
 
-    List<BacSi> findByhoTenContainingIgnoreCase(String hoTen); // Tìm bác sĩ theo tên chứa từ khóa
+    boolean existsBySdt(String sdt);
+
+    List<BacSi> findByHoTenContainingIgnoreCase(String hoTen);
+
 }

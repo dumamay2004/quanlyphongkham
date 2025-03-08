@@ -1,4 +1,4 @@
-﻿-- Tạo database
+﻿	-- Tạo database
 CREATE DATABASE QuanLyDuAn;
 USE QuanLyDuAn;
 go
@@ -33,7 +33,7 @@ CREATE TABLE CHUYENKHOA (
 	hinh NVARCHAR(255),
 	so_luong INT NOT NULL DEFAULT 0
 );
-
+select * from BACSI
 -- Tạo bảng nhân viên
 CREATE TABLE BACSI (
     ma_bac_si VARCHAR(20) NOT NULL PRIMARY KEY,

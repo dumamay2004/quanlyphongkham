@@ -82,7 +82,7 @@ public class ChuyenKhoaController {
     }
 
     // Cập nhật chuyên khoa
-    @PostMapping("/update")
+    @PostMapping("/chuyenkhoa/update")
     public String updateChuyenkhoa(@Validated @ModelAttribute("chuyenKhoa") ChuyenKhoa chuyenkhoa,
             BindingResult result, Model model, RedirectAttributes redirect) {
 
@@ -109,7 +109,7 @@ public class ChuyenKhoaController {
             redirect.addFlashAttribute("success", "Chuyên khoa đã được cập nhật thành công!");
         }
 
-        return "redirect:/chuyenkhoa";
+        return "redirect:/quanly/trangchu/chuyenkhoa";
     }
 
     // Xóa chuyên khoa

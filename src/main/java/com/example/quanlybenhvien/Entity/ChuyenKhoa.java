@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "CHUYENKHOA")
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChuyenKhoa {
-@Id
+    @Id
     @Column(name = "ma_chuyen_khoa")
     private String maChuyenKhoa;
 
@@ -31,5 +32,6 @@ public class ChuyenKhoa {
     private String soLuong;
 
     @OneToMany(mappedBy = "chuyenKhoa")
-    private List<BacSi> nhanVien;
+    @ToString.Exclude
+    private List<BacSi> bacSi;
 }

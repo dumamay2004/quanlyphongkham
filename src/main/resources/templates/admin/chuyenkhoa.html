@@ -90,7 +90,7 @@
                     <div class="col-md-6">
                         <div class="card">
                             <h5 class="text-center text-primary fw-bold">Thêm / Sửa Chuyên Khoa</h5>
-                            <form th:action="@{${isEditing} ? '/quanly/trangchu/chuyenkhoa/update' : '/nguoidung/trangchu/chuyenkhoa'}" method="post" th:object="${chuyenKhoa}">
+                            <form th:action="@{${isEditing} ? '/quanly/trangchu/chuyenkhoa/update' : '/quanly/trangchu/chuyenkhoa'}" method="post" th:object="${chuyenKhoa}">
                                 <div class="mb-3">
                                     <label for="maChuyenKhoa" class="form-label fw-bold">Mã Chuyên Khoa</label>
                                     <input type="text" id="maChuyenKhoa" name="maChuyenKhoa" th:field="*{maChuyenKhoa}" class="form-control" th:attr="readonly=${isEditing} ? 'readonly' : null" required>
@@ -103,7 +103,7 @@
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <button type="submit" class="btn btn-primary btn-custom">[[${isEditing} ? 'Cập nhật' : 'Thêm mới']]</button>
-                                    <a th:href="@{/nguoidung/trangchu/chuyenkhoa}" class="btn btn-secondary btn-custom">Reset</a>
+                                    <a th:href="@{/quanly/trangchu/chuyenkhoa}" class="btn btn-secondary btn-custom">Reset</a>
                                 </div>
                             </form>
                         </div>
@@ -111,7 +111,7 @@
                     <div class="col-md-6">
                         <div class="card">
                             <h5 class="text-center text-primary fw-bold">Danh sách Chuyên Khoa</h5>
-                            <form th:action="@{/nguoidung/trangchu/chuyenkhoa/search}" method="get" class="mb-3">
+                            <form th:action="@{/quanly/trangchu/chuyenkhoa/search}" method="get" class="mb-3">
                                 <div class="input-group rounded shadow-sm">
                                     <span class="input-group-text bg-white border-0">
                                         <i class="bi bi-search text-success"></i>
@@ -134,8 +134,8 @@
                                             <td th:text="${ck.maChuyenKhoa}"></td>
                                             <td th:text="${ck.tenChuyenKhoa}"></td>
                                             <td>
-                                                <a th:href="@{/nguoidung/trangchu/chuyenkhoa/edit/{id}(id=${ck.maChuyenKhoa})}" class="btn btn-warning btn-sm">Sửa</a>
-                                                <a th:href="@{/nguoidung/trangchu/chuyenkhoa/delete/{id}(id=${ck.maChuyenKhoa})}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa chuyên khoa này?');">Xóa</a>
+                                                <a th:href="@{/quanly/trangchu/chuyenkhoa/edit/{id}(id=${ck.maChuyenKhoa})}" class="btn btn-warning btn-sm">Sửa</a>
+                                                <a th:href="@{/quanly/trangchu/chuyenkhoa/delete/{id}(id=${ck.maChuyenKhoa})}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa chuyên khoa này?');">Xóa</a>
                                             </td>
                                         </tr>
                                         <tr th:if="${#lists.isEmpty(chuyenkhoas)}">

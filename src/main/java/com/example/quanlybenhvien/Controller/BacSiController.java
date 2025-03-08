@@ -1,10 +1,16 @@
 package com.example.quanlybenhvien.Controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,7 +26,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.quanlybenhvien.Entity.BacSi;
 import com.example.quanlybenhvien.Entity.ChuyenKhoa;
+import com.example.quanlybenhvien.Entity.Vaitro;
 import com.example.quanlybenhvien.Service.ChuyenKhoaService;
+import com.example.quanlybenhvien.Service.VaiTroService;
 import com.example.quanlybenhvien.Service.BacSiService;
 
 @Controller
@@ -33,98 +41,103 @@ public class BacSiController {
     @Autowired
     private ChuyenKhoaService chuyenkhoaService;
 
+    @Autowired
+    private VaiTroService vaiTroService;
+
     // Hiển thị danh sách bác sĩ
     @GetMapping
     public String listBacSi(Model model) {
-        List<BacSi> listBacSi = bacSiService.getAllNhanVien();
-        List<ChuyenKhoa> listChuyenKhoa =
-        chuyenkhoaService.getAllChuyenKhoa();
+        List<BacSi> listBacSi = bacSiService.getAllBacSi();
+        List<ChuyenKhoa> listChuyenKhoa = chuyenkhoaService.getAllChuyenKhoa();
+        List<Vaitro> listVaiTro = vaiTroService.findAll();
 
         model.addAttribute("dsBacSi", listBacSi);
         model.addAttribute("dsChuyenKhoa", listChuyenKhoa);
+        model.addAttribute("dsVaiTro", listVaiTro);
         model.addAttribute("bacsi", new BacSi());
         model.addAttribute("isEdit", false);
         return "admin/bacsi";
     }
 
-    // Thêm bác sĩ
     @PostMapping("/add")
     public String addBacSi(@Validated @ModelAttribute("bacsi") BacSi bacsi,
             BindingResult result,
             @RequestParam("file") MultipartFile file,
             Model model, RedirectAttributes redirectAttributes) {
+
+        // Kiểm tra lỗi validate
         if (result.hasErrors() || bacsi.getHoTen().trim().isEmpty() || bacsi.getEmail().trim().isEmpty()) {
             model.addAttribute("error", "Không được để trống các trường!");
-            model.addAttribute("dsBacSi", bacSiService.getAllNhanVien());
+            model.addAttribute("dsBacSi", bacSiService.getAllBacSi());
             model.addAttribute("isEdit", false);
-            return "/admin/bacsi";
+            return "admin/bacsi";
         }
 
-        // Kiểm tra xem mã bác sĩ đã tồn tại chưa
+        // Kiểm tra mã bác sĩ đã tồn tại chưa
         if (bacSiService.existsById(bacsi.getMaBacSi())) {
-            model.addAttribute("error", "Mã bác sĩ đã tồn tại!");
-            model.addAttribute("dsBacSi", bacSiService.getAllNhanVien());
-            model.addAttribute("isEdit", false);
-            return "/admin/bacsi";
+            redirectAttributes.addFlashAttribute("error", "Mã bác sĩ đã tồn tại, vui lòng nhập mã khác!");
+            return "redirect:/quanly/trangchu/bacsi";
         }
 
         // Kiểm tra email đã tồn tại chưa
         if (bacSiService.existsByEmail(bacsi.getEmail())) {
-            model.addAttribute("error", "Email đã tồn tại!");
-            model.addAttribute("dsBacSi", bacSiService.getAllNhanVien());
-model.addAttribute("isEdit", false);
-            return "/admin/bacsi";
+            redirectAttributes.addFlashAttribute("error", "Email đã tồn tại, vui lòng nhập email khác!");
+            return "redirect:/quanly/trangchu/bacsi";
         }
 
-        // Xử lý lưu ảnh vào static/imageBS
+        // Kiểm tra CCCD đã tồn tại chưa
+        if (bacSiService.existsByCccd(bacsi.getCccd())) {
+            redirectAttributes.addFlashAttribute("error", "CCCD đã tồn tại, vui lòng nhập CCCD khác!");
+            return "redirect:/quanly/trangchu/bacsi";
+        }
+
+        // Kiểm tra số điện thoại đã tồn tại chưa
+        if (bacSiService.existsBySdt(bacsi.getSdt())) {
+            redirectAttributes.addFlashAttribute("error", "Số điện thoại đã tồn tại, vui lòng nhập số khác!");
+            return "redirect:/quanly/trangchu/bacsi";
+        }
+
+        // Xử lý lưu ảnh vào static/images
         if (!file.isEmpty()) {
             try {
-                // Tạo tên file duy nhất
                 String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                String uploadDir = new File("src/main/resources/static/images/").getAbsolutePath();
-
-                // Tạo thư mục nếu chưa tồn tại
-                File uploadFolder = new File(uploadDir);
-                if (!uploadFolder.exists()) {
-                    uploadFolder.mkdirs();
-                }
-
-                // Lưu file vào thư mục
-                File destinationFile = new File(uploadFolder, fileName);
-                file.transferTo(destinationFile);
-
-                // Chỉ lưu tên file vào database
+                Path path = Paths.get("src/main/resources/static/images/", fileName);
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                 bacsi.setHinh(fileName);
-
-            } catch (Exception e) {
-                model.addAttribute("error", "Lỗi khi tải ảnh lên!");
-                return "/admin/bacsi";
+            } catch (IOException e) {
+                redirectAttributes.addFlashAttribute("error", "Lỗi upload ảnh!");
+                return "redirect:/quanly/trangchu/bacsi";
             }
         } else {
-            bacsi.setHinh("default.png"); // Ảnh mặc định nếu không tải lên
+            bacsi.setHinh("default.png");
         }
+
         // Lưu bác sĩ mới
-        bacSiService.save(bacsi);
-        redirectAttributes.addFlashAttribute("success", "Bác sĩ đã được thêm thành công!");
-        return "redirect:/bacsi";
+        try {
+            bacSiService.save(bacsi);
+            redirectAttributes.addFlashAttribute("success", "Thêm bác sĩ thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Lỗi không xác định khi lưu dữ liệu!");
+        }
+        return "redirect:/quanly/trangchu/bacsi";
     }
 
-    // Chỉnh sửa bác sĩ
     @GetMapping("/edit/{id}")
-    public String editBacSi(@PathVariable String id, Model model) {
-        Optional<BacSi> bacsiOpt = bacSiService.findById(id);
-        if (bacsiOpt.isPresent()) {
-            model.addAttribute("bacsi", bacsiOpt.get());
+    public String editBacSi(@PathVariable String id, Model model, RedirectAttributes redirect) {
+        Optional<BacSi> bacSi = bacSiService.findById(id);
+        if (bacSi.isPresent()) {
+            model.addAttribute("bacsi", bacSi.get());
             model.addAttribute("isEdit", true);
         } else {
-            model.addAttribute("bacsi", new BacSi());
-            model.addAttribute("isEdit", false);
+            redirect.addFlashAttribute("error", "Không tìm thấy bác sĩ cần chỉnh sửa!");
+            return "redirect:/quanly/trangchu/bacsi";
         }
-        model.addAttribute("dsBacSi", bacSiService.getAllNhanVien());
-        model.addAttribute("dsChuyenKhoa",
-        chuyenkhoaService.getAllChuyenKhoa());
-        return "/admin/bacsi";
+        model.addAttribute("dsBacSi", bacSiService.getAllBacSi());
+        model.addAttribute("dsChuyenKhoa", chuyenkhoaService.getAllChuyenKhoa());
+        model.addAttribute("dsVaiTro", vaiTroService.findAll());
+        return "admin/bacsi";
     }
+
     @PostMapping("/update")
     public String updateBacSi(@Validated @ModelAttribute("bacsi") BacSi bacsiEntity,
             BindingResult result,
@@ -133,9 +146,9 @@ model.addAttribute("isEdit", false);
 
         if (result.hasErrors() || bacsiEntity.getHoTen().trim().isEmpty()) {
             model.addAttribute("error", "Không được để trống các trường!");
-            model.addAttribute("bacsi", bacSiService.getAllNhanVien());
+            model.addAttribute("bacsi", bacSiService.getAllBacSi());
             model.addAttribute("isEdit", true);
-            return "/admin/bacsi";
+            return "admin/bacsi";
         }
 
         Optional<BacSi> existingBacSi = bacSiService.findById(bacsiEntity.getMaBacSi());
@@ -146,9 +159,16 @@ model.addAttribute("isEdit", false);
             existingEntity.setHoTen(bacsiEntity.getHoTen());
             existingEntity.setEmail(bacsiEntity.getEmail());
             existingEntity.setChuyenKhoa((bacsiEntity.getChuyenKhoa()));
-            // existingEntity.setChucvu(bacsiEntity.getChucvu());
+            existingEntity.setVaiTro(bacsiEntity.getVaiTro());
+            existingEntity.setCccd(bacsiEntity.getCccd());
+            existingEntity.setDiaChi(bacsiEntity.getDiaChi());
+            existingEntity.setGioiTinh(bacsiEntity.getGioiTinh());
+            // existingEntity.setHinh(bacsiEntity.getHinh());
+            existingEntity.setMatKhau(bacsiEntity.getMatKhau());
+            existingEntity.setSdt(bacsiEntity.getSdt());
+            existingEntity.setGhiChu(bacsiEntity.getGhiChu());
 
-            // Kiểm tra xem có ảnh mới được tải lên không
+            // Kiểm tra nếu có ảnh mới được tải lên
             if (file != null && !file.isEmpty()) {
                 try {
                     // Tạo tên file duy nhất
@@ -177,7 +197,7 @@ model.addAttribute("isEdit", false);
                     existingEntity.setHinh(fileName);
                 } catch (Exception e) {
                     model.addAttribute("error", "Lỗi khi tải ảnh lên!");
-                    return "/admin/bacsi";
+                    return "admin/bacsi";
                 }
             }
 
@@ -188,9 +208,10 @@ model.addAttribute("isEdit", false);
             redirect.addFlashAttribute("error", "Không tìm thấy bác sĩ để cập nhật!");
         }
 
-        return "redirect:/bacsi";
+        return "redirect:/quanly/trangchu/bacsi";
     }
-// Xóa bác sĩ
+
+    // Xóa bác sĩ
     @GetMapping("/delete/{id}")
     public String deleteBacSi(@PathVariable String id, RedirectAttributes redirectAttributes) {
         Optional<BacSi> bacsiOpt = bacSiService.findById(id);
@@ -200,7 +221,8 @@ model.addAttribute("isEdit", false);
         } else {
             redirectAttributes.addFlashAttribute("error", "Không tìm thấy bác sĩ để xóa!");
         }
-        return "redirect:/bacsi";
+        return "redirect:/quanly/trangchu/bacsi";
+
     }
 
     // Tìm kiếm bác sĩ theo tên
@@ -208,7 +230,7 @@ model.addAttribute("isEdit", false);
     public String searchBacSi(@RequestParam("keyword") String keyword, Model model) {
         List<BacSi> result;
         if (keyword.trim().isEmpty()) {
-            result = bacSiService.getAllNhanVien();
+            result = bacSiService.getAllBacSi();
         } else {
             result = bacSiService.searchByName(keyword);
         }
@@ -216,6 +238,6 @@ model.addAttribute("isEdit", false);
         model.addAttribute("dsBacSi", result);
         model.addAttribute("bacsi", new BacSi());
         model.addAttribute("isEdit", false);
-        return "/admin/bacsi";
+        return "admin/bacsi";
     }
 }
