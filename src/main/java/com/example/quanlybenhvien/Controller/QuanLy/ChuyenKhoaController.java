@@ -1,4 +1,4 @@
-package com.example.quanlybenhvien.Controller;
+package com.example.quanlybenhvien.Controller.QuanLy;
 
 import java.util.List;
 import java.util.Optional;

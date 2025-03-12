@@ -1,4 +1,4 @@
-    package com.example.quanlybenhvien.Controller;
+    package com.example.quanlybenhvien.Controller.NguoiDung;
 
 import com.example.quanlybenhvien.Dao.BenhNhanDao;
 import com.example.quanlybenhvien.Entity.BenhNhan;

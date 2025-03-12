@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -41,5 +41,33 @@ public class AdminSecurityConfig {
     
         return http.build();
     }
-  
+
+    // Không mã hóa mật khẩu cho bác sĩ
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+    // Cấu hình bảo mật cho bác sĩ
+    @Bean
+    public SecurityFilterChain bacsiSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/bacsi/**") // Áp dụng bảo mật cho "/bacsi/**"
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/bacsi/**").hasAnyRole("VT01", "VT00") // Bác sĩ và quản lý vào được
+                .anyRequest().authenticated())
+            .formLogin(form -> form
+                .loginPage("/bacsi/login") // Trang đăng nhập riêng cho bác sĩ
+                .loginProcessingUrl("/bacsi/login")
+                .defaultSuccessUrl("/bacsi/trangchu", true)
+                .failureUrl("/bacsi/login?error=true")
+                .permitAll())
+            .logout(logout -> logout
+                .logoutUrl("/bacsi/logout")
+                .logoutSuccessUrl("/bacsi/login?logout=true")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true))
+            .csrf(csrf -> csrf.disable());
+
+        return http.build();
+    }
 }

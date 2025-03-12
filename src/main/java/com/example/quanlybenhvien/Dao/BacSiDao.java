@@ -22,4 +22,6 @@ public interface BacSiDao extends JpaRepository<BacSi, String> {
 
     List<BacSi> findByHoTenContainingIgnoreCase(String hoTen);
 
+    Optional<BacSi>findByEmail(String email);
+
 }

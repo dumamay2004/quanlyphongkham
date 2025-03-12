@@ -1,4 +1,4 @@
-package com.example.quanlybenhvien.Controller;
+package com.example.quanlybenhvien.Controller.NguoiDung;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

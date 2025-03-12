@@ -1,20 +1,21 @@
-package com.example.quanlybenhvien.Controller;
+package com.example.quanlybenhvien.Controller.BacSi;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.quanlybenhvien.Service.QuanLyService;
 
 @Controller
-public class AdminController {
-    @Autowired
+@RequestMapping("/bacsi")
+public class BacSiController {
+@Autowired
     QuanLyService nguoiDungService;
 
-    @GetMapping("/quanly/login")
+    @GetMapping("/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
             Model model) {
@@ -29,6 +30,6 @@ public class AdminController {
 
     @GetMapping("/quanly/trangchu")
     public String showAdminHome() {
-        return "admin/admin";
+        return "bacsi/bacsi";
     }
 }

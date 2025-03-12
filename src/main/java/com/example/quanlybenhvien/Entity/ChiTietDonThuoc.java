@@ -23,7 +23,7 @@ public class ChiTietDonThuoc {
 
     @Column(name = "ma_don_thuoc", nullable = false)
     private Integer maDonThuoc;
-
+    
     @Column(name = "ma_thuoc", length = 20, nullable = false)
     private String maThuoc;
 

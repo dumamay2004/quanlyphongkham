@@ -1,4 +1,4 @@
-package com.example.quanlybenhvien.Controller;
+package com.example.quanlybenhvien.Controller.QuanLy;
 
 import java.io.File;
 import java.io.IOException;
