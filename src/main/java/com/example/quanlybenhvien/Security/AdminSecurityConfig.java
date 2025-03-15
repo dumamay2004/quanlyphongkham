@@ -22,7 +22,7 @@ public class AdminSecurityConfig {
     @Bean
     public SecurityFilterChain adminSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-            .securityMatcher("/quanly/**","/api/**","/js/**") // Chỉ áp dụng cho "/admin/**"
+            .securityMatcher("/quanly/**","/js/**") // Chỉ áp dụng cho "/admin/**"
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/quanly/**","/api/**").hasRole("VT00") // Chỉ ADMIN mới vào được
                 .anyRequest().authenticated())
@@ -41,13 +41,6 @@ public class AdminSecurityConfig {
     
         return http.build();
     }
-
-    // Không mã hóa mật khẩu cho bác sĩ
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
-    }
-    // Cấu hình bảo mật cho bác sĩ
     @Bean
     public SecurityFilterChain bacsiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -70,4 +63,6 @@ public class AdminSecurityConfig {
 
         return http.build();
     }
+    
+    
 }

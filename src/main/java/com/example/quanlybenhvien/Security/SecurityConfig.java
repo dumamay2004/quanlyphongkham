@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-@Order(2)
+@Order(3)
 public class SecurityConfig {
     private final ClientRegistrationRepository clientRegistrationRepository;
     private final PasswordEncoder passwordEncoder;
@@ -29,7 +29,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/dangky", "/index", "/login", "/css/**", "/js/**", "/images/**","/api/vaitro").permitAll()
+                        .requestMatchers("/dangky", "/index", "/login", "/css/**", "/js/**", "/images/**","/api/vaitro","/nguoidung/chuyenkhoa","/nguoidung/bacsi","/nguoidung/bacsi/chitiet/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login") // Trang đăng nhập chung

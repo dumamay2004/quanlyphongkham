@@ -1,7 +1,7 @@
 package com.example.quanlybenhvien.Entity;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -24,7 +24,7 @@ public class BenhNhan {
     private String hoTen;
 
     @Column(name = "nam_sinh")
-    private Date namSinh;
+    private LocalDate namSinh;
 
     @Column(name = "gioi_tinh")
     private String gioiTinh;

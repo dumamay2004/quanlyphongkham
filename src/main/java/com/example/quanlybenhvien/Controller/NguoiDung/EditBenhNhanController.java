@@ -1,5 +1,7 @@
 package com.example.quanlybenhvien.Controller.NguoiDung;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,34 +24,41 @@ public class EditBenhNhanController {
     @Autowired
     private BenhNhanService benhNhanService;
 
-    // Hiển thị form chỉnh sửa thông tin bệnh nhân
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
-        // Tìm bệnh nhân theo ID
         BenhNhan benhNhan = benhNhanService.findById(id);
         if (benhNhan != null) {
+            // Kiểm tra nếu namSinh đang null, đặt giá trị mặc định
+            if (benhNhan.getNamSinh() == null) {
+                benhNhan.setNamSinh(LocalDate.now()); // Đặt ngày mặc định là hôm nay
+            }
             model.addAttribute("benhnhan", benhNhan);
-            return "thongtincanhan"; // Trang chỉnh sửa thông tin
+            return "thongtincanhan";
         }
         model.addAttribute("error", "Bệnh nhân không tồn tại");
-        return "error"; // Nếu không tìm thấy bệnh nhân
+        return "error";
     }
 
-    // Cập nhật thông tin bệnh nhân
     @PostMapping("/update/{id}")
-    public String updateBenhNhan(@PathVariable("id") Integer id, @ModelAttribute BenhNhan benhNhan, Model model, RedirectAttributes redirectAttributes) {
-        try {
-            // Gọi service để cập nhật bệnh nhân theo ID
-            BenhNhan updatedBenhNhan = benhNhanService.updateBenhNhan(id, benhNhan);
-            redirectAttributes.addFlashAttribute("message", "Cập nhật thông tin bệnh nhân thành công!");
+    public String updateBenhNhan(@PathVariable("id") Integer id,
+            @ModelAttribute("benhnhan") BenhNhan benhNhan,
+            RedirectAttributes redirectAttributes) {
+        System.out.println("Cập nhật bệnh nhân ID: " + id);
+        System.out.println("Thông tin nhận được: " + benhNhan);
 
-            // Thêm thông tin bệnh nhân đã cập nhật vào model
-            model.addAttribute("benhNhan", updatedBenhNhan);
-            return "redirect:/benhnhan/edit/" + id; // Đúng
-            // Chuyển đến trang thành công
+        try {
+            benhNhanService.updateBenhNhan(id, benhNhan);
+            redirectAttributes.addFlashAttribute("message", "Cập nhật thông tin bệnh nhân thành công!");
+            System.out.println("kkkkkk");
+            return "redirect:/benhnhan/edit/" + id;
         } catch (EntityNotFoundException e) {
-            model.addAttribute("error", e.getMessage());
-            return "error"; // Chuyển đến trang lỗi nếu không tìm thấy bệnh nhân
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy bệnh nhân.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Đã xảy ra lỗi khi cập nhật thông tin.");
+            e.printStackTrace(); // In lỗi ra console
+
         }
+        
+        return "redirect:/benhnhan/edit/" + id;
     }
 }

@@ -7,13 +7,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.quanlybenhvien.Service.BacSiService;
 import com.example.quanlybenhvien.Service.QuanLyService;
 
 @Controller
 @RequestMapping("/bacsi")
-public class BacSiController {
+public class BacSiBSController {
 @Autowired
-    QuanLyService nguoiDungService;
+    BacSiService bacSiService;
 
     @GetMapping("/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error,
@@ -25,10 +26,10 @@ public class BacSiController {
         if (logout != null) {
             model.addAttribute("message", "Đã đăng xuất thành công!");
         }
-        return "admin/admin-login";
+        return "bacsi/bacsi-login";
     }
 
-    @GetMapping("/quanly/trangchu")
+    @GetMapping("/trangchu")
     public String showAdminHome() {
         return "bacsi/bacsi";
     }

@@ -153,6 +153,17 @@
                             th:value="${benhnhan != null ? benhnhan.hoTen : ''}" required>
                      
                         </div>
+                        <div class="mb-3">
+                            <label for="nam_sinh" class="form-label">Năm sinh</label>
+                            <input type="date" class="form-control" id="nam_sinh" name="namSinh" th:value="*{benhnhan.namSinh}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="gioi_tinh" class="form-label">Giới tính</label>
+                            <select class="form-control" id="gioi_tinh" name="gioiTinh">
+                                <option value="Nam" th:selected="${benhnhan.gioiTinh == 'Nam'}">Nam</option>
+                                <option value="Nữ" th:selected="${benhnhan.gioiTinh == 'Nữ'}">Nữ</option>
+                            </select>
+                        </div>
                         
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
@@ -168,6 +179,19 @@
                             <label for="matkhau" class="form-label">Mật khẩu</label>
                             <input type="password" class="form-control" id="matkhau" name="matKhau">
                         </div>
+                        
+                        <div class="mb-3">
+                            <label for="tinh_tp" class="form-label">Tỉnh/Thành phố</label>
+                            <input type="text" class="form-control" id="tinh_tp" name="tinhTp" th:value="*{benhnhan.tinhTp}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="quan_huyen" class="form-label">Quận/Huyện</label>
+                            <input type="text" class="form-control" id="quan_huyen" name="quanHuyen" th:value="*{benhnhan.quanHuyen}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="duong" class="form-label">Đường</label>
+                            <input type="text" class="form-control" id="duong" name="duong" th:value="*{benhnhan.duong}">
+                        </div>
                     
                         <button type="submit" class="btn btn-primary">Lưu bệnh nhân</button>
                     </form>
@@ -177,17 +201,27 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Họ Tên</th>
+                                <th>Năm sinh</th>
+                                <th>Giới Tính</th>
                                 <th>Email</th>
                                 <th>Số Điện Thoại</th>
-                                <th>Hành Động</th>
+                                <th>Tỉnh, thành phố</th>
+                                <th>Quận huyện</th>
+                                <th>Đường</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="benhnhan : ${benhnhans}">
                                 <td th:text="${benhnhan.maBenhNhan}"></td>
                                 <td th:text="${benhnhan.hoTen}"></td>
+                                <td th:text="${benhnhan.namSinh}"></td>
+                                <td th:text="${benhnhan.gioiTinh}"></td>
                                 <td th:text="${benhnhan.email}"></td>
                                 <td th:text="${benhnhan.sdt}"></td>
+                                <td th:text="${benhnhan.tinhTp}"></td>
+                                <td th:text="${benhnhan.quanHuyen}"></td>
+                                <td th:text="${benhnhan.duong}"></td>
                                 <td>
                                     <a th:href="@{/quanly/trangchu/benhnhan/edit/{id}(id=${benhnhan.maBenhNhan})}" class="btn btn-warning btn-sm">
                                         Sửa
@@ -200,6 +234,7 @@
                     </table>
                     
                   </div>
+
 
         </main>
     </div>
