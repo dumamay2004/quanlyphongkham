@@ -88,31 +88,14 @@
 
         <div class="row mt-4 g-4">
             <div class="col-md-3" th:each="ckND : ${chuyenkhoaND}">
-                <div class="specialty-card" data-bs-toggle="modal"
-                    th:attr="data-bs-target='#modal-' + ${ckND.maChuyenKhoa}">
-                    <img th:src="@{'/images/imagesCK/' + ${ckND.hinh}}" class="specialty-icon" alt="icon">
-                    <div class="specialty-name" th:text="${ckND.tenChuyenKhoa}">Tên Chuyên Khoa</div>
-                </div>
-
-                <!-- Modal -->
-                <div class="modal fade" th:id="'modal-' + ${ckND.maChuyenKhoa}" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <img th:src="@{'/images/imagesCK/' + ${ckND.hinh}}" class="specialty-icon" alt="icon">
-                            </div>
-                            <div class="modal-body">
-                                <p th:text="${ckND.tenChuyenKhoa}">Mô tả chuyên khoa...</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            </div>
-                        </div>
+                <a th:href="@{/nguoidung/chuyenkhoa/chitiet/{id}(id=${ckND.maChuyenKhoa})}" class="text-decoration-none">
+                    <div class="specialty-card">
+                        <img th:src="@{'/images/imagesCK/' + ${ckND.hinh}}" class="specialty-icon" alt="icon">
+                        <div class="specialty-name" th:text="${ckND.tenChuyenKhoa}">Tên Chuyên Khoa</div>
                     </div>
-                </div>
-                <!-- Kết thúc Modal -->
-
+                </a>
             </div>
+            
         </div>
     </div>
 

@@ -25,18 +25,20 @@ public class BacSiService {
     // Lấy tất cả bác sĩ
     public List<BacSi> getAllBacSi() {
         return bacsiDao.findAll();
-     }
-// @Override
-//     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//         BacSi bacSi = bacsiDao.findByEmail(email)
-//             .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy bác sĩ với email: " + email));
+    }
+    // @Override
+    // public UserDetails loadUserByUsername(String email) throws
+    // UsernameNotFoundException {
+    // BacSi bacSi = bacsiDao.findByEmail(email)
+    // .orElseThrow(() -> new UsernameNotFoundException("Không tìm thấy bác sĩ với
+    // email: " + email));
 
-//         return User.builder()
-//             .username(bacSi.getEmail())
-//             .password(bacSi.getMatKhau())  // Đã mã hóa trong DB
-//             .roles("VT01") // Gán quyền là "BACSI"
-//             .build();
-//     }
+    // return User.builder()
+    // .username(bacSi.getEmail())
+    // .password(bacSi.getMatKhau()) // Đã mã hóa trong DB
+    // .roles("VT01") // Gán quyền là "BACSI"
+    // .build();
+    // }
     // Lấy bác sĩ theo trang
     // public Page<BacSi> getBacSiByPage(int page, int size) {
     // Pageable pageable = PageRequest.of(page, size);
@@ -80,7 +82,13 @@ public class BacSiService {
     public List<BacSi> searchByName(String keyword) {
         return bacsiDao.findByHoTenContainingIgnoreCase(keyword);
     }
+
     public BacSi getBacSiByEmail(String email) {
         return bacsiDao.findByEmail(email).orElse(null);
     }
+
+    public List<BacSi> getBacSiByChuyenKhoa(String maChuyenKhoa) {
+        return bacsiDao.findByChuyenKhoa_MaChuyenKhoa(maChuyenKhoa);
+    }
+
 }

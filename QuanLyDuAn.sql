@@ -26,6 +26,7 @@ CREATE TABLE QUANLY
 	dia_chi NVARCHAR(255) NOT NULL,
 	foreign key (vai_tro) REFERENCES VAITRO(ma_vai_tro)
 )
+select * from CHUYENKHOA
 -- Tạo bảng chuyên khoa
 CREATE TABLE CHUYENKHOA (
     ma_chuyen_khoa VARCHAR(20) NOT NULL PRIMARY KEY,
@@ -33,6 +34,13 @@ CREATE TABLE CHUYENKHOA (
 	hinh NVARCHAR(255),
 	so_luong INT NOT NULL DEFAULT 0
 );
+ALTER TABLE CHUYENKHOA  
+ADD ghi_chu NVARCHAR(MAX);
+
+ALTER TABLE CHUYENKHOA
+ALTER COLUMN so_luong INT NULL;
+
+
 select * from BACSI
 -- Tạo bảng nhân viên
 CREATE TABLE BACSI (
@@ -102,6 +110,7 @@ CREATE TABLE DICHVU (
     gia DECIMAL(10,2) NOT NULL
 );
 
+ALTER TABLE LICHKHAM ALTER COLUMN ma_nhan_vien VARCHAR(20) NULL;
 -- Tạo bảng lịch khám
 CREATE TABLE LICHKHAM (
     ma_lich_kham int identity(1,1) PRIMARY KEY,
@@ -118,6 +127,7 @@ CREATE TABLE LICHKHAM (
     FOREIGN KEY (ma_chuyen_khoa) REFERENCES CHUYENKHOA(ma_chuyen_khoa),
 	FOREIGN KEY (ma_bac_si) REFERENCES BACSI(ma_bac_si),
 );
+select * from LICHKHAM
 
 -- Tạo bảng chi tiết dịch vụ
 CREATE TABLE CHITIETDICHVU (

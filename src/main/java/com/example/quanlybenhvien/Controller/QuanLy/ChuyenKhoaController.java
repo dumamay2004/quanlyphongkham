@@ -1,5 +1,7 @@
 package com.example.quanlybenhvien.Controller.QuanLy;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.quanlybenhvien.Entity.ChuyenKhoa;
 import com.example.quanlybenhvien.Service.ChuyenKhoaService;
@@ -32,33 +35,54 @@ public class ChuyenKhoaController {
         model.addAttribute("chuyenkhoas", list);
         model.addAttribute("chuyenKhoa", new ChuyenKhoa()); // Đối tượng rỗng để nhập dữ liệu mới
         model.addAttribute("isEditing", false); // Không ở chế độ chỉnh sửa
-        return "/admin/chuyenkhoa";
+        return "admin/chuyenkhoa";
     }
 
     // Thêm chuyên khoa mới
     @PostMapping("/chuyenkhoa")
     public String addChuyenkhoa(@Validated @ModelAttribute("chuyenKhoa") ChuyenKhoa chuyenkhoa,
-            BindingResult result, Model model, RedirectAttributes redirect) {
+            BindingResult result, Model model, RedirectAttributes redirect, @RequestParam("file") MultipartFile file) {
 
         if (result.hasErrors() || chuyenkhoa.getTenChuyenKhoa().trim().isEmpty()) {
             model.addAttribute("message", "Không được để trống các trường!");
             model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());
             model.addAttribute("isEditing", false);
-            return "/admin/chuyenkhoa";
+            return "admin/chuyenkhoa";
         }
 
         if (chuyenKhoaService.existsById(chuyenkhoa.getMaChuyenKhoa())) {
             model.addAttribute("message", "Mã chuyên khoa đã tồn tại!");
             model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());
             model.addAttribute("isEditing", false);
-            return "/admin/chuyenkhoa";
+            return "admin/chuyenkhoa";
         }
 
         if (chuyenKhoaService.existsByTenCK(chuyenkhoa.getTenChuyenKhoa())) {
             model.addAttribute("message", "Tên chuyên khoa đã tồn tại!");
             model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());
             model.addAttribute("isEditing", false);
-            return "/admin/chuyenkhoa";
+            return "admin/chuyenkhoa";
+        }
+
+        // Lưu ảnh vào thư mục static/images/imagesCK
+        if (!file.isEmpty()) {
+            try {
+                // Đặt tên file là tên gốc và thêm tiền tố để tránh trùng
+                String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                String uploadDir = "src/main/resources/static/images/imagesCK/"; // Đảm bảo thư mục imagesCK có thể truy
+                                                                                 // cập được
+                File uploadFile = new File(uploadDir + fileName);
+                file.transferTo(uploadFile);
+
+                // Lưu đường dẫn của ảnh vào cơ sở dữ liệu (nếu cần)
+                chuyenkhoa.setHinh("/images/imagesCK/" + fileName); // Lưu đường dẫn tương đối
+            } catch (IOException e) {
+                e.printStackTrace();
+                model.addAttribute("message", "Lỗi khi tải ảnh lên!");
+                model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());
+                model.addAttribute("isEditing", false);
+                return "/admin/chuyenkhoa";
+            }
         }
 
         chuyenKhoaService.save(chuyenkhoa);
@@ -78,33 +102,57 @@ public class ChuyenKhoaController {
             model.addAttribute("isEditing", false);
         }
         model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());
-        return "/admin/chuyenkhoa";
+        return "admin/chuyenkhoa";
     }
 
     // Cập nhật chuyên khoa
     @PostMapping("/chuyenkhoa/update")
     public String updateChuyenkhoa(@Validated @ModelAttribute("chuyenKhoa") ChuyenKhoa chuyenkhoa,
-            BindingResult result, Model model, RedirectAttributes redirect) {
+            BindingResult result, Model model, RedirectAttributes redirect, @RequestParam("file") MultipartFile file) {
 
         if (result.hasErrors() || chuyenkhoa.getTenChuyenKhoa().trim().isEmpty()) {
             model.addAttribute("message", "Không được để trống các trường!");
             model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());
             model.addAttribute("isEditing", true);
-            return "/admin/chuyenkhoa";
+            return "admin/chuyenkhoa";
         }
 
         Optional<ChuyenKhoa> existingChuyenKhoa = chuyenKhoaService.findById(chuyenkhoa.getMaChuyenKhoa());
         if (existingChuyenKhoa.isPresent()) {
-            if (!existingChuyenKhoa.get().getTenChuyenKhoa().equals(chuyenkhoa.getMaChuyenKhoa())
+            // Kiểm tra nếu tên chuyên khoa mới đã tồn tại (tránh trùng với chuyên khoa
+            // khác)
+            if (!existingChuyenKhoa.get().getTenChuyenKhoa().equals(chuyenkhoa.getTenChuyenKhoa())
                     && chuyenKhoaService.existsByTenCK(chuyenkhoa.getTenChuyenKhoa())) {
                 model.addAttribute("message", "Tên chuyên khoa đã tồn tại!");
                 model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());
                 model.addAttribute("isEditing", true);
-                return "/admin/chuyenkhoa";
+                return "admin/chuyenkhoa";
             }
 
+            // Nếu có file ảnh mới, lưu ảnh vào thư mục
+            if (!file.isEmpty()) {
+                try {
+                    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+                    String uploadDir = "src/main/resources/static/images/imagesCK/"; // Đảm bảo thư mục imagesCK có thể
+                                                                                     // truy cập được
+                    File uploadFile = new File(uploadDir + fileName);
+                    file.transferTo(uploadFile);
+
+                    // Lưu đường dẫn ảnh mới vào cơ sở dữ liệu
+                    chuyenkhoa.setHinh("/images/imagesCK/" + fileName);
+                } catch (IOException e) {
+                    model.addAttribute("message", "Lỗi khi tải ảnh lên!");
+                    model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());
+                    model.addAttribute("isEditing", true);
+                    return "admin/chuyenkhoa";
+                }
+            }
+
+            // Cập nhật chuyên khoa
             ChuyenKhoa existingCK = existingChuyenKhoa.get();
-            existingCK.setTenChuyenKhoa((chuyenkhoa.getTenChuyenKhoa()));
+            existingCK.setTenChuyenKhoa(chuyenkhoa.getTenChuyenKhoa());
+            existingCK.setGhiChu(chuyenkhoa.getGhiChu());
+            existingCK.setHinh((chuyenkhoa.getHinh())); // Cập nhật ảnh nếu có
             chuyenKhoaService.save(existingCK);
             redirect.addFlashAttribute("success", "Chuyên khoa đã được cập nhật thành công!");
         }

@@ -75,6 +75,9 @@
                         <a class="nav-link" href="#">TIN TỨC </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" th:href="@{/nguoidung/lichkham}">LỊCH KHÁM</a>
+                    </li>
+                    <li class="nav-item">
                         <span class="nav-link" href="#"> | </span>
                     </li>
                     <li class="nav-item">
@@ -85,18 +88,39 @@
                             aria-expanded="false" th:text="${user != null ? user.hoTen : 'Tài khoản'}">
                         </a>
 
-                        <ul class="dropdown-menu">
-                            <li th:if="${user == null}"><a class="dropdown-item" href="/login">Đăng nhập</a></li>
-                            <li th:if="${user != null}"><a class="dropdown-item" href="/logout">Đăng xuất</a></li>
+                        <ul class="dropdown-menu shadow-lg rounded-3 border-0">
+                            <li th:if="${user == null}">
+                                <a class="dropdown-item d-flex align-items-center py-2" href="/login">
+                                    <i class="fas fa-sign-in-alt me-2 text-primary"></i> Đăng nhập
+                                </a>
+                            </li>
+                            <li th:if="${user != null}">
+                                <a class="dropdown-item d-flex align-items-center py-2 text-danger" href="/logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Đăng xuất
+                                </a>
+                            </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li th:if="${user != null}"><!-- Liên kết đến trang cập nhật thông tin người dùng -->
-                                <a th:href="@{/benhnhan/edit/{maBenhNhan}(maBenhNhan=${user.maBenhNhan})}" class="btn ">Chỉnh sửa
-                                    thông tin</a>
+                            <li th:if="${user != null}">
+                                <a th:href="@{/benhnhan/edit/{maBenhNhan}(maBenhNhan=${user.maBenhNhan})}" 
+                                   class="dropdown-item d-flex align-items-center py-2">
+                                    <i class="fas fa-user-edit me-2 text-success"></i> Chỉnh sửa thông tin
+                                </a>
                             </li>
-                            <li th:if="${user == null}"><a class="dropdown-item" href="/dangky">Đăng Ký</a></li>
+                            <li th:if="${user != null}">
+                                <a th:href="@{/nguoidung/lichkham/lichsu}" 
+                                   class="dropdown-item d-flex align-items-center py-2">
+                                    <i class="fas fa-calendar-alt me-2 text-info"></i> Lịch sử đặt lịch
+                                </a>
+                            </li>
+                            <li th:if="${user == null}">
+                                <a class="dropdown-item d-flex align-items-center py-2 text-success" href="/dangky">
+                                    <i class="fas fa-user-plus me-2"></i> Đăng Ký
+                                </a>
+                            </li>
                         </ul>
+                        
                     </li>
                     <li th:if="${user != null}" class="nav-item">
                         <img th:src="@{${user.hinh != null ? user.hinh : '/images/default-avatar.png'}}"

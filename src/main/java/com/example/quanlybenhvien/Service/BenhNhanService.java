@@ -13,14 +13,14 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class BenhNhanService {
-    
+
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
     BenhNhanDao benhNhanDao;
 
     // Constructor đúng tên lớp và tiêm PasswordEncoder
-  
+
     public BenhNhanService(PasswordEncoder passwordEncoder) {
         this.passwordEncoder = passwordEncoder;
     }
@@ -54,14 +54,15 @@ public class BenhNhanService {
         return "Đăng ký thành công!";
     }
 
-     public BenhNhan findById(Integer id) {
+    public BenhNhan findById(Integer id) {
         return benhNhanDao.findById(id).orElse(null);
     }
 
     // Cập nhật bệnh nhân
     public BenhNhan updateBenhNhan(Integer id, BenhNhan benhNhan) {
         // Kiểm tra xem bệnh nhân có tồn tại không
-        BenhNhan existingBenhNhan = benhNhanDao.findById(id).orElseThrow(() -> new EntityNotFoundException("Bệnh nhân không tồn tại"));
+        BenhNhan existingBenhNhan = benhNhanDao.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Bệnh nhân không tồn tại"));
 
         // Cập nhật các trường dữ liệu
         existingBenhNhan.setHoTen(benhNhan.getHoTen());
@@ -78,10 +79,11 @@ public class BenhNhanService {
         // Lưu lại bản ghi đã cập nhật
         return benhNhanDao.save(existingBenhNhan);
     }
-    public void deleteBenhNhan(Integer id)
-    {
+
+    public void deleteBenhNhan(Integer id) {
         benhNhanDao.deleteById(id);
     }
+
     public List<BenhNhan> getAllBenhNhans() {
         return benhNhanDao.findAll();
     }
@@ -90,8 +92,13 @@ public class BenhNhanService {
     public List<BenhNhan> searchByKeyword(String keyword) {
         return benhNhanDao.findByHoTenContainingIgnoreCase(keyword);
     }
- 
+
     public void saveBenhNhan(BenhNhan benhNhan) {
         benhNhanDao.save(benhNhan);
     }
+
+    public BenhNhan findByEmail(String email) {
+        return benhNhanDao.findByEmail(email).orElse(null);
+    }
+
 }

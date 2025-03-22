@@ -1,20 +1,28 @@
-    package com.example.quanlybenhvien.Controller.NguoiDung;
+package com.example.quanlybenhvien.Controller.NguoiDung;
 
 import com.example.quanlybenhvien.Dao.BenhNhanDao;
 import com.example.quanlybenhvien.Entity.BenhNhan;
 import com.example.quanlybenhvien.Service.BenhNhanService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -40,23 +48,36 @@ public class LoginController {
 
     @PostMapping("/login")
     public String login_1(@RequestParam("email") String email,
-            @RequestParam("matkhau") String matKhau,
+            @RequestParam("matKhau") String matKhau,
             HttpSession session,
+            HttpServletRequest request,
             Model model) {
-        // Kiểm tra người dùng trong cơ sở dữ liệu
         BenhNhan user = benhNhanDao.findByEmail(email).orElse(null);
         if (user != null) {
-            // Kiểm tra mật khẩu
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             if (passwordEncoder.matches(matKhau, user.getMatKhau())) {
+                // 1. Lưu vào session
                 session.setAttribute("user", user);
+
+                // 2. Tạo Authentication thủ công cho Spring Security
+                List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("USER"));
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user.getEmail(),
+                        null, authorities);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+
+                // 3. (Optional) Update HttpSession security context nếu cần
+                request.getSession().setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                        SecurityContextHolder.getContext());
+                // ✅ In thông báo khi đăng nhập thành công
+                System.out.println("Bắt đầu kiểm tra đăng nhập với email: " + email);
+
+                System.out.println("Đăng nhập thành công: " + user.getEmail());
                 return "redirect:/index";
             } else {
                 model.addAttribute("error", "Mật khẩu không đúng.");
                 return "login";
             }
         } else {
-
             model.addAttribute("error", "Email không tồn tại.");
             return "login";
         }
@@ -106,21 +127,33 @@ public class LoginController {
     }
 
     @GetMapping("/dangky")
-    public String dangky() {
-        return "dangky";
+    public String dangKyForm(Model model) {
+        model.addAttribute("benhNhan", new BenhNhan());
+        return "dangky"; // Tên file html là dangky.html hoặc dangky.jsp tùy project
     }
 
     @PostMapping("/dangky")
-    public String dangky(BenhNhan benhNhan, Model model) {
-        // Kiểm tra và xử lý đăng ký
-        String message = benhNhanService.dangKyNguoiDung(benhNhan);
-
-        if (message.equals("Đăng ký thành công!")) {
-            return "redirect:/index";
-        } else {
-            model.addAttribute("error", message);
-            return "dangky"; // Trả về lại trang đăng ký
+    public String dangKySubmit(@ModelAttribute("benhNhan") BenhNhan benhNhan, Model model) {
+        // Kiểm tra trùng email
+        if (benhNhanDao.findByEmail(benhNhan.getEmail()).isPresent()) {
+            model.addAttribute("error", "Email đã tồn tại!");
+            return "dangky";
         }
+
+        // Kiểm tra nhập lại mật khẩu
+        if (!benhNhan.getMatKhau().equals(benhNhan.getNhapLaiMatKhau())) {
+            model.addAttribute("error", "Mật khẩu nhập lại không khớp!");
+            return "dangky";
+        }
+
+        // Mã hóa mật khẩu
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        benhNhan.setMatKhau(encoder.encode(benhNhan.getMatKhau()));
+
+        // Lưu vào DB
+        benhNhanDao.save(benhNhan);
+
+        return "redirect:/login?registerSuccess=true";
     }
 
 }

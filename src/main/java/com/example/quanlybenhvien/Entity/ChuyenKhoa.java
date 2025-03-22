@@ -31,6 +31,9 @@ public class ChuyenKhoa {
     @Column(name = "so_luong")
     private String soLuong;
 
+    @Column(name = "ghi_chu", columnDefinition = "NVARCHAR(MAX)")
+    private String ghiChu;
+
     @OneToMany(mappedBy = "chuyenKhoa")
     @ToString.Exclude
     private List<BacSi> bacSi;

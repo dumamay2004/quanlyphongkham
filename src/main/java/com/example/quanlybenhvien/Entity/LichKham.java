@@ -3,6 +3,7 @@ package com.example.quanlybenhvien.Entity;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class LichKham {
-     @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ma_lich_kham")
     private Integer maLichKham;
@@ -32,7 +33,7 @@ public class LichKham {
     private BenhNhan benhNhan;
 
     @ManyToOne
-    @JoinColumn(name = "ma_nhan_vien", nullable = false)
+    @JoinColumn(name = "ma_nhan_vien", nullable = true)
     private NhanVien nhanVien;
 
     @ManyToOne
@@ -54,4 +55,5 @@ public class LichKham {
 
     @Column(name = "ghi_chu", nullable = false)
     private String ghiChu;
+
 }
