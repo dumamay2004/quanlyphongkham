@@ -47,7 +47,10 @@ public class NhanVien {
 
     @Column(name = "hinh")
     private String hinh;
-    
+
+    @Column(name = "ghi_chu")
+    private String ghiChu;
+
     @ManyToOne
     @JoinColumn(name = "vai_tro", referencedColumnName = "ma_vai_tro")
     private Vaitro vaiTro;
