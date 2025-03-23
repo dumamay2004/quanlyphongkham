@@ -2,6 +2,10 @@ package com.example.quanlybenhvien.Controller.QuanLy;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,15 +71,10 @@ public class ChuyenKhoaController {
         // Lưu ảnh vào thư mục static/images/imagesCK
         if (!file.isEmpty()) {
             try {
-                // Đặt tên file là tên gốc và thêm tiền tố để tránh trùng
                 String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                String uploadDir = "src/main/resources/static/images/imagesCK/"; // Đảm bảo thư mục imagesCK có thể truy
-                                                                                 // cập được
-                File uploadFile = new File(uploadDir + fileName);
-                file.transferTo(uploadFile);
-
-                // Lưu đường dẫn của ảnh vào cơ sở dữ liệu (nếu cần)
-                chuyenkhoa.setHinh("/images/imagesCK/" + fileName); // Lưu đường dẫn tương đối
+                Path path = Paths.get("src/main/resources/static/images/imagesCK", fileName);
+                Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                chuyenkhoa.setHinh(fileName);
             } catch (IOException e) {
                 e.printStackTrace();
                 model.addAttribute("message", "Lỗi khi tải ảnh lên!");
@@ -133,13 +132,9 @@ public class ChuyenKhoaController {
             if (!file.isEmpty()) {
                 try {
                     String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-                    String uploadDir = "src/main/resources/static/images/imagesCK/"; // Đảm bảo thư mục imagesCK có thể
-                                                                                     // truy cập được
-                    File uploadFile = new File(uploadDir + fileName);
-                    file.transferTo(uploadFile);
-
-                    // Lưu đường dẫn ảnh mới vào cơ sở dữ liệu
-                    chuyenkhoa.setHinh("/images/imagesCK/" + fileName);
+                    Path path = Paths.get("src/main/resources/static/images/imagesCK", fileName);
+                    Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    chuyenkhoa.setHinh(fileName);
                 } catch (IOException e) {
                     model.addAttribute("message", "Lỗi khi tải ảnh lên!");
                     model.addAttribute("chuyenkhoas", chuyenKhoaService.getAllChuyenKhoa());

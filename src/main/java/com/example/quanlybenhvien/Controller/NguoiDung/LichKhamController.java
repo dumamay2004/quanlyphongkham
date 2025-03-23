@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -25,6 +26,8 @@ import com.example.quanlybenhvien.Service.BenhNhanService;
 import com.example.quanlybenhvien.Service.ChuyenKhoaService;
 import com.example.quanlybenhvien.Service.LichKhamService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/nguoidung/lichkham")
 public class LichKhamController {
@@ -42,12 +45,26 @@ public class LichKhamController {
     BenhNhanService benhNhanService;
 
     @GetMapping
-    public String lichkham(@RequestParam(value = "maChuyenKhoa", required = false) String maChuyenKhoa, Model model) {
+    public String lichkham(@RequestParam(value = "maChuyenKhoa", required = false) String maChuyenKhoa,
+            HttpSession session, Model model) {
         List<ChuyenKhoa> listChuyenKhoa = chuyenKhoaService.getAllChuyenKhoa();
         List<BacSi> listBacSi;
 
+        // Lấy user từ SecurityContext hoặc Session
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        BenhNhan benhNhan = null;
+
+        if (auth.getPrincipal() instanceof BenhNhan) {
+            benhNhan = (BenhNhan) auth.getPrincipal();
+        } else if (auth.getPrincipal() instanceof DefaultOAuth2User oauth2User) {
+            String email = oauth2User.getAttribute("email");
+            benhNhan = benhNhanService.findByEmail(email);
+        }
+
+        model.addAttribute("user", benhNhan);
+
         if (maChuyenKhoa != null && !maChuyenKhoa.isEmpty()) {
-            listBacSi = bacSiService.getBacSiByChuyenKhoa(maChuyenKhoa); // Lọc bác sĩ theo chuyên khoa
+            listBacSi = bacSiService.getBacSiByChuyenKhoa(maChuyenKhoa);
         } else {
             listBacSi = bacSiService.getAllBacSi();
         }
@@ -132,9 +149,10 @@ public class LichKhamController {
         if (benhNhan != null) {
             List<LichKham> lichSu = lichKhamService.findByBenhNhan(benhNhan);
             model.addAttribute("lichSu", lichSu);
+            model.addAttribute("benhNhan", benhNhan); // <-- Gửi thêm thông tin bệnh nhân ra view
         }
 
-        return "lichsudatlich"; // Tạo trang HTML để hiển thị lịch sử
+        return "lichsudatlich";
     }
 
 }

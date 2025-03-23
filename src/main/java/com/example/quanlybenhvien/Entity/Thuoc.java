@@ -1,5 +1,6 @@
 package com.example.quanlybenhvien.Entity;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -33,7 +35,7 @@ public class Thuoc {
     private String moTa;
 
     @Column(name = "gia_thuoc", nullable = false)
-    private Double giaThuoc;
+    private BigDecimal giaThuoc;
 
     @Column(name = "don_vi", nullable = false)
     private String donVi;

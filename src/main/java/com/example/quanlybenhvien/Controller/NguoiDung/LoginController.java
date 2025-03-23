@@ -36,7 +36,7 @@ public class LoginController {
 
     @GetMapping("/index")
     public String index(Model model, HttpSession session) {
-        BenhNhan benhNhan = (BenhNhan) session.getAttribute("user");
+        BenhNhan benhNhan = (BenhNhan) session.getAttribute("loggedInUser");
         model.addAttribute("user", benhNhan);
         return "index";
     }
