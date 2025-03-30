@@ -6,6 +6,18 @@
     <title>Document</title>
 </head>
 <body>
-    dsfdsf
+    <div th:fragment="menu">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/bacsi/trangchu/lichkham/cho-xac-nhan}">Xác nhận lịch khám</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/bacsi/profile}">Thông tin cá nhân</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" th:href="@{/bacsi/logout}">Đăng xuất</a>
+          </li>
+        </ul>
+      </div>
 </body>
 </html>
