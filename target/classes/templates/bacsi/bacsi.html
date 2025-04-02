@@ -1,23 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Menu Bác Sĩ</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <div th:fragment="menu">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link" th:href="@{/bacsi/trangchu/lichkham/cho-xac-nhan}">Xác nhận lịch khám</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" th:href="@{/bacsi/profile}">Thông tin cá nhân</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" th:href="@{/bacsi/logout}">Đăng xuất</a>
-          </li>
+    <div th:fragment="menu" class="mt-3">
+        <ul class="list-group">
+            <!-- Xác nhận lịch khám -->
+            <li class="list-group-item">
+                <a class="nav-link text-dark" th:href="@{/bacsi/trangchu/lichkham/cho-xac-nhan}">
+                    📌 Xác nhận lịch khám
+                </a>
+            </li>
+
+            <!-- Lịch khám đã xác nhận -->
+            <li class="list-group-item">
+                <a class="nav-link text-dark" th:href="@{/bacsi/trangchu/lichkham/da-xac-nhan}">
+                    ✅ Lịch khám đã xác nhận
+                </a>
+            </li>
+
+            <!-- Thêm dịch vụ vào lịch khám (chỉ hiển thị nếu có lịch khám được chọn) -->
+            <li class="list-group-item" th:if="${lichKham != null}">
+                <a class="nav-link text-dark" th:href="@{'/bacsi/trangchu/dichvu/them?maLichKham=' + ${lichKham.maLichKham}}">
+                    ➕ Thêm dịch vụ vào lịch khám
+                </a>
+            </li>
+
+            <!-- Thông tin cá nhân -->
+            <li class="list-group-item">
+                <a class="nav-link text-dark" th:href="@{/bacsi/profile}">
+                    👤 Thông tin cá nhân
+                </a>
+            </li>
+
+            <!-- Đăng xuất -->
+            <li class="list-group-item">
+                <a class="nav-link text-danger fw-bold" th:href="@{/bacsi/logout}">
+                    🚪 Đăng xuất
+                </a>
+            </li>
         </ul>
-      </div>
+    </div>
 </body>
 </html>

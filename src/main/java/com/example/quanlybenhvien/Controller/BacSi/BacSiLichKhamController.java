@@ -53,4 +53,15 @@ public class BacSiLichKhamController {
         }
         return "redirect:/bacsi/trangchu/lichkham/cho-xac-nhan";
     }
+    @GetMapping("/da-xac-nhan")
+    public String hienThiLichKhamDaXacNhan(Model model) {
+        BacSi bacSiDangNhap = bacSiService.getBacSiDangNhap();
+        if (bacSiDangNhap == null) {
+            return "redirect:/bacsi/login";
+        }
+        List<LichKham> lichKhamsDaXacNhan = lichKhamService.getLichKhamDaXacNhanTheoBacSi(bacSiDangNhap);
+        model.addAttribute("bacSi", bacSiDangNhap);
+        model.addAttribute("lichKhams", lichKhamsDaXacNhan);
+        return "bacsi/lichkham-da-xacnhan";  
+    }
 }

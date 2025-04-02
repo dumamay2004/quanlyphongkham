@@ -1,6 +1,6 @@
 ﻿	-- Tạo database
 CREATE DATABASE QuanLyDuAn;
-USE QuanLyDuAn;
+USE QuanLyDuAn7;
 go
 -- drop database QuanLyDuAn
 
