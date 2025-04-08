@@ -66,50 +66,95 @@
 
        <div class="mt-4">
            <h4>📋 Các Chức Năng Chính</h4>
-           <div class="container">
-            <h2><i class="fas fa-calendar-check"></i> Lịch khám đã xác nhận</h2>
-            
-            <div class="table-responsive">
-              <table class="table table-bordered table-hover">
-                <thead>
-                  <tr>
-                    <th>Mã lịch khám</th>
-                    <th>Bệnh nhân</th>
-                    <th>Chuyên khoa</th>
-                    <th>Ngày khám</th>
-                    <th>Giờ khám</th>
-                    <th>Trạng thái</th>
-                    <th>Ghi chú</th>
-                    <th>Hành động</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr th:each="lich : ${lichKhams}">
-                    <td th:text="${lich.maLichKham}"></td>
-                    <td th:text="${lich.benhNhan.hoTen}"></td>
-                    <td th:text="${lich.chuyenKhoa.tenChuyenKhoa}"></td>
-                    <td th:text="${#temporals.format(lich.ngayKham, 'dd/MM/yyyy')}"></td>
-                    <td th:text="${lich.gioKham}"></td>
-                    <td>
-                      <span class="badge bg-success" th:text="${lich.trangThai}"></span>
-                    </td>
-                    <td th:text="${lich.ghiChu}"></td>
-                    <!-- Link chọn lịch khám để thêm dịch vụ -->
-                    <td>
-                      <a class="btn btn-primary btn-sm" 
-                         th:href="@{'/bacsi/trangchu/dichvu/them?maLichKham=' + ${lich.maLichKham}}">
-                        ➕ Thêm dịch vụ
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            
-            <a class="btn btn-secondary btn-back" th:href="@{/bacsi/trangchu/lichkham/cho-xac-nhan}">
-              <i class="fas fa-arrow-left"></i> Quay lại
+           
+<div class="container">
+  <h2><i class="fas fa-calendar-check"></i> Lịch khám đã xác nhận</h2>
+
+  <!-- BẢNG 1: Lịch khám đã xác nhận -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>Mã lịch khám</th>
+          <th>Bệnh nhân</th>
+          <th>Chuyên khoa</th>
+          <th>Ngày khám</th>
+          <th>Giờ khám</th>
+          <th>Trạng thái</th>
+          <th>Ghi chú</th>
+          <th>Hành động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="lich : ${lichKhams}">
+          <td th:text="${lich.maLichKham}"></td>
+          <td th:text="${lich.benhNhan.hoTen}"></td>
+          <td th:text="${lich.chuyenKhoa.tenChuyenKhoa}"></td>
+          <td th:text="${#temporals.format(lich.ngayKham, 'dd/MM/yyyy')}"></td>
+          <td th:text="${lich.gioKham}"></td>
+          <td>
+            <span class="badge bg-warning">Bác sĩ đã xác nhận</span>
+          </td>
+          <td th:text="${lich.ghiChu}"></td>
+          <td>
+            <a class="btn btn-success btn-sm mb-1"
+   th:href="@{'/bacsi/trangchu/lichkham/benhnhan-den?maLichKham=' + ${lich.maLichKham}}"
+   onclick="return confirm('Xác nhận bệnh nhân đã đến?');">
+   ✅ Đã đến
+</a>
+
+<a class="btn btn-danger btn-sm"
+   th:href="@{'/bacsi/trangchu/lichkham/huy-lich?maLichKham=' + ${lich.maLichKham}}"
+   onclick="return confirm('Bạn có chắc muốn hủy lịch khám này?');">
+   ❌ Hủy
+</a>
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- BẢNG 2: Lịch khám bệnh nhân đã đến -->
+  <h4 class="section-title"><i class="fas fa-user-check"></i> Danh sách bệnh nhân đã đến</h4>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover mt-3">
+      <thead>
+        <tr>
+          <th>Mã lịch khám</th>
+          <th>Bệnh nhân</th>
+          <th>Chuyên khoa</th>
+          <th>Ngày khám</th>
+          <th>Giờ khám</th>
+          <th>Trạng thái</th>
+          <th>Ghi chú</th>
+          <th>Thêm dịch vụ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="lich : ${benhNhanDen}">
+          <td th:text="${lich.maLichKham}"></td>
+          <td th:text="${lich.benhNhan.hoTen}"></td>
+          <td th:text="${lich.chuyenKhoa.tenChuyenKhoa}"></td>
+          <td th:text="${#temporals.format(lich.ngayKham, 'dd/MM/yyyy')}"></td>
+          <td th:text="${lich.gioKham}"></td>
+          <td><span class="badge bg-success">Bệnh nhân đã đến</span></td>
+          <td th:text="${lich.ghiChu}"></td>
+          <td>
+            <a class="btn btn-primary btn-sm"
+               th:href="@{'/bacsi/trangchu/dichvu/them?maLichKham=' + ${lich.maLichKham}}">
+              ➕ Thêm dịch vụ
             </a>
-          </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <a class="btn btn-secondary btn-back" th:href="@{/bacsi/trangchu/lichkham/cho-xac-nhan}">
+    <i class="fas fa-arrow-left"></i> Quay lại
+  </a>
+</div>
        </div>
    </div>
   

@@ -94,7 +94,8 @@ public class ChiTietDichVuController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi thêm dịch vụ: " + e.getMessage());
         }
-        return "redirect:/bacsi/trangchu/lichkham/cho-xac-nhan";
+        return "redirect:/bacsi/trangchu/dichvu/danh-sach?maLichKham=" + dto.getLichKham().getMaLichKham();
+
     }
 
     // Hiển thị danh sách dịch vụ đã thêm cho lịch khám

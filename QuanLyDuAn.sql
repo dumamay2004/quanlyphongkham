@@ -42,7 +42,7 @@ ALTER COLUMN so_luong INT NULL;
 
 
 select * from BACSI
--- Tạo bảng nhân viên
+
 CREATE TABLE BACSI (
     ma_bac_si VARCHAR(20) NOT NULL PRIMARY KEY,
     ho_ten NVARCHAR(255) NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE BENHNHAN (
     nam_sinh DATE ,
     gioi_tinh VARCHAR(10) ,
     sdt VARCHAR(15) UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL ,
     mat_khau NVARCHAR(255) ,
     hinh NVARCHAR(255) ,
     tinh_tp NVARCHAR(100) ,
@@ -194,7 +194,7 @@ CREATE TABLE CHITIETDONTHUOC (
     ma_chi_tiet_dt INT IDENTITY(1,1) PRIMARY KEY,
     ma_don_thuoc INT NOT NULL,
     ma_thuoc VARCHAR(20) NOT NULL,
-    soluong INT NOT NULL CHECK (soluong > 0),
+    so_luong INT NOT NULL CHECK (soluong > 0),
     lieu_luong NVARCHAR(100) NOT NULL,
     FOREIGN KEY (ma_don_thuoc) REFERENCES DONTHUOC(ma_don_thuoc) ON DELETE CASCADE,
     FOREIGN KEY (ma_thuoc) REFERENCES THUOC(ma_thuoc) ON DELETE CASCADE
