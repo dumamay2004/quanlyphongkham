@@ -65,13 +65,13 @@
         
   <div class="container my-4">
     <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link active" aria-current="page" th:href="@{/nhanvien/trangchu/lichkham/cho-xac-nhan}">Lịch khám chờ xác nhận</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" th:href="@{/nhanvien/trangchu/lichkham/da-huy}">Lịch khám đã hủy</a>
-      </li>
-    </ul>
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/nhanvien/trangchu/lichkham/cho-xac-nhan}">Lịch khám chờ xác nhận</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/nhanvien/trangchu/lichkham/da-huy}">Lịch khám đã hủy</a>
+        </li>
+      </ul>
     <h2 class="mb-4 text-center">Danh sách lịch khám chờ xác nhận</h2>
     
     <!-- Hiển thị thông báo lỗi/thành công nếu có -->
@@ -79,53 +79,28 @@
     <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
     
     <div class="table-responsive">
-      <table class="table table-bordered table-hover align-middle">
-        <thead class="table-light">
-          <tr class="text-center">
-            <th>Mã lịch khám</th>
-            <th>Bệnh nhân</th>
-            <th>Chuyên khoa</th>
-            <th>Bác sĩ</th>
-            <th>Nhân viên</th>
-            <th>Ngày khám</th>
-            <th>Giờ khám</th>
-            <th>Trạng thái</th>
-            <th>Ghi chú</th>
-            <th>Hành động</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="lich : ${lichKhams}">
-            <td th:text="${lich.maLichKham}" class="text-center">1</td>
-            <td th:text="${lich.benhNhan.hoTen}">Nguyễn Văn A</td>
-            <td th:text="${lich.chuyenKhoa.tenChuyenKhoa}">Nội khoa</td>
-            <td th:text="${lich.bacSi != null ? lich.bacSi.hoTen : 'Không có'}">Bác sĩ B</td>
-            <td th:text="${lich.nhanVien != null ? lich.nhanVien.hoTen : 'Chưa xác nhận'}">Nhân viên</td>
-            <td th:text="${#temporals.format(lich.ngayKham, 'dd/MM/yyyy')}" class="text-center">01/01/2025</td>
-            <td th:text="${lich.gioKham}" class="text-center">08:30</td>
-            <td th:text="${lich.trangThai}" class="text-center">Chờ xác nhận</td>
-            <td th:text="${lich.ghiChu}">Chưa có ghi chú</td>
-            <td class="text-center">
-              <!-- Form xác nhận lịch khám -->
-              <form th:action="@{/nhanvien/trangchu/lichkham/xac-nhan}" method="post" class="d-inline">
-                <input type="hidden" name="maLichKham" th:value="${lich.maLichKham}" />
-                <input type="hidden" name="trangThai" value="Đã xác nhận" />
-                <div class="mb-1">
-                  <input type="text" name="ghiChu" placeholder="Nhập ghi chú" class="form-control form-control-sm" required/>
-                </div>
-                <button type="submit" class="btn btn-success btn-sm">Xác nhận</button>
-              </form>
-              <!-- Form hủy lịch khám -->
-              <form th:action="@{/nhanvien/trangchu/lichkham/xac-nhan}" method="post" class="d-inline ms-2">
-                <input type="hidden" name="maLichKham" th:value="${lich.maLichKham}" />
-                <input type="hidden" name="trangThai" value="Hủy" />
-                <input type="hidden" name="ghiChu" value="Hủy lịch" />
-                <button type="submit" class="btn btn-danger btn-sm">Hủy</button>
-              </form>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <table class="table table-bordered table-hover align-middle text-center">
+            <thead class="table-primary">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">👤 Bệnh nhân</th>
+                    <th scope="col">📅 Ngày khám</th>
+                    <th scope="col">📝 Ghi chú</th>
+                    <th scope="col">📌 Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="lich, iterStat : ${lichKhams}">
+                    <td th:text="${iterStat.index + 1}">1</td>
+                    <td th:text="${lich.benhNhan.hoTen}">Nguyễn Văn A</td>
+                    <td th:text="${lich.ngayKham}">10/04/2025</td>
+                    <td th:text="${lich.ghiChu}">Không rõ lý do</td>
+                    <td>
+                        <span class="badge bg-danger" th:text="${lich.trangThai}">Đã hủy</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
   </div>
   

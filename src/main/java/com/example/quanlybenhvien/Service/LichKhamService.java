@@ -148,6 +148,9 @@ public class LichKhamService {
     public Optional<LichKham> findById(int maLichKham) {
         return lichKhamDao.findById(maLichKham);
     }
-
+    public List<LichKham> getLichKhamDaHuy()
+    {
+        return lichKhamDao.findByTrangThai("Đã hủy");
+    }
 
 }

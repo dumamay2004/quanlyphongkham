@@ -39,7 +39,26 @@ public class BacSiLichKhamController {
         model.addAttribute("benhNhanDen", benhNhanDaDen);
         return "bacsi/lichkham-da-xacnhan"; // Template nằm trong: src/main/resources/templates/bacsi/lichkham-da-xacnhan.html
     }
-
+    @PostMapping("/xac-nhan")
+    public String xacNhanLichKham(@RequestParam int maLichKham,
+                                  @RequestParam String trangThai,
+                                  @RequestParam String ghiChu,
+                                  RedirectAttributes redirectAttributes) {
+        BacSi bacSiDangNhap = bacSiService.getBacSiDangNhap();
+        if (bacSiDangNhap == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy thông tin bác sĩ đăng nhập!");
+            return "redirect:/bacsi/login";
+        }
+        try {
+            // Ví dụ: nếu bác sĩ xác nhận, trạng thái sẽ là "Đã xác nhận bởi bác sĩ"
+            // nếu hủy, trạng thái là "Hủy bởi bác sĩ"
+            lichKhamService.xacNhanLichKhamTheoBacSi(maLichKham, trangThai, ghiChu, bacSiDangNhap);
+            redirectAttributes.addFlashAttribute("successMessage", "Xác nhận lịch khám thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi: " + e.getMessage());
+        }
+        return "redirect:/bacsi/trangchu/lichkham/cho-xac-nhan";
+    }
     // // Đánh dấu lịch khám khi bệnh nhân đã đến
     // @GetMapping("/benhnhan-den")
     // public String danhDauBenhNhanDaDen(@RequestParam("maLichKham") Integer maLichKham,

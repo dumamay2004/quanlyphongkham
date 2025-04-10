@@ -50,4 +50,14 @@ public class XacNhanLichKhamController {
         }
         return "redirect:/nhanvien/trangchu/lichkham/cho-xac-nhan";
     }
+    @GetMapping("/da-huy")
+public String hienThiLichKhamDaHuy(Model model) {
+    NhanVien nhanVienDangNhap = nhanVienService.getNhanVienDangNhap();
+    if (nhanVienDangNhap == null) {
+        return "redirect:/nhanvien/login";
+    }
+    //model.addAttribute("nhanVien", nhanVienDangNhap);
+    model.addAttribute("lichKhams", lichKhamService.getLichKhamDaHuy());
+    return "nhanvien/lichkham-dahuy"; // Trang JSP/HTML bạn sẽ tạo
+}
 }
