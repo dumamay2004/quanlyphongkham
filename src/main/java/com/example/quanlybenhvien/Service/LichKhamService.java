@@ -145,4 +145,9 @@ public class LichKhamService {
         return lichKhamDao.findByBacSiAndTrangThai(bacSi, "Bệnh nhân đã đến");
     }
     
+    public Optional<LichKham> findById(int maLichKham) {
+        return lichKhamDao.findById(maLichKham);
+    }
+
+
 }
