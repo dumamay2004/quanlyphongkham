@@ -86,6 +86,10 @@ public class LichKhamService {
         return lichKhamDao.findByBacSiAndTrangThai(bacSi, "Đã xác nhận bởi bác sĩ");
     }
 
+    public List<LichKham> getHoanThanhLichKham(BacSi bacSi) {
+        return lichKhamDao.findByBacSiAndTrangThai(bacSi, "Đã hoàn thành");
+    }
+
     // Lấy lịch khám theo ID
     public LichKham getLichKhamById(int maLichKham) {
         return lichKhamDao.findById(maLichKham).orElse(null);
@@ -104,6 +108,25 @@ public class LichKhamService {
             lichKham.setTrangThai("Bệnh nhân đã đến");
             lichKhamDao.save(lichKham);
             System.out.println("✅ Đánh dấu bệnh nhân đã đến thành công!");
+            return true;
+        }
+        System.out.println("❌ Không tìm thấy lịch khám với mã: " + maLichKham);
+        return false;
+    }
+
+    // Đánh dấu lịch khám khi bệnh nhân đã đến
+    public boolean hoanThanhLichKham(Integer maLichKham) {
+        Optional<LichKham> optional = lichKhamDao.findById(maLichKham);
+        if (optional.isPresent()) {
+            LichKham lichKham = optional.get();
+            // Chỉ cho phép đánh dấu nếu trạng thái hiện tại là "Đã xác nhận bởi bác sĩ"
+            if (!"Bệnh nhân đã đến".equals(lichKham.getTrangThai())) {
+                System.out.println("⚠️ Lịch khám không ở trạng thái cho phép đánh dấu hoàn thành !");
+                return false;
+            }
+            lichKham.setTrangThai("Đã hoàn thành");
+            lichKhamDao.save(lichKham);
+            System.out.println("✅ Đánh dấu đã hoàn thành thành công!");
             return true;
         }
         System.out.println("❌ Không tìm thấy lịch khám với mã: " + maLichKham);
@@ -152,5 +175,12 @@ public class LichKhamService {
     {
         return lichKhamDao.findByTrangThai("Đã hủy");
     }
-
+    public List<LichKham> getChoBacSi()
+    {
+        return lichKhamDao.findByTrangThai("Chờ bác sĩ xác nhận");
+    }
+    public List<LichKham> getLichKhamHoanThanh()
+    {
+        return lichKhamDao.findByTrangThai("Đã hoàn thành");
+    }
 }

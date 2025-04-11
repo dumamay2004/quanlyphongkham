@@ -34,9 +34,10 @@ public class BacSiLichKhamController {
 
         List<LichKham> lichKhamsDaXacNhan = lichKhamService.getLichKhamDaXacNhanTheoBacSi(bacSiDangNhap);
         List<LichKham> benhNhanDaDen = lichKhamService.getLichKhamBenhNhanDaDenTheoBacSi(bacSiDangNhap);
-
+        List<LichKham> hoanThanhLichKham = lichKhamService.getHoanThanhLichKham(bacSiDangNhap);
         model.addAttribute("lichKhams", lichKhamsDaXacNhan);
         model.addAttribute("benhNhanDen", benhNhanDaDen);
+        model.addAttribute("hoanThanhLichKham", hoanThanhLichKham);
         return "bacsi/lichkham-da-xacnhan"; // Template nằm trong: src/main/resources/templates/bacsi/lichkham-da-xacnhan.html
     }
     @PostMapping("/xac-nhan")
@@ -105,6 +106,18 @@ public class BacSiLichKhamController {
             redirectAttributes.addFlashAttribute("successMessage", "✅ Đã đánh dấu bệnh nhân đã đến!");
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "❌ Không thể đánh dấu bệnh nhân đã đến!");
+        }
+        return "redirect:/bacsi/trangchu/lichkham/da-xac-nhan";
+    }
+
+    @GetMapping("/hoanthanh")
+    public String hoanThanhLichKham(@RequestParam("maLichKham") Integer maLichKham,
+                                        RedirectAttributes redirectAttributes) {
+        boolean success = lichKhamService.hoanThanhLichKham(maLichKham);
+        if (success) {
+            redirectAttributes.addFlashAttribute("successMessage", "✅ Đã đánh dấu hoàn thành lịch khám!");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "❌ Không thể đánh dấu không hoàn thành !");
         }
         return "redirect:/bacsi/trangchu/lichkham/da-xac-nhan";
     }
