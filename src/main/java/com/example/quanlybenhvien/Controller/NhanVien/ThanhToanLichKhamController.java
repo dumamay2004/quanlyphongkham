@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.quanlybenhvien.Service.LichKhamService;
 
 @Controller
-@RequestMapping("/nhanvien/trangchu/lichkham")
+@RequestMapping("/nhanvien/trangchu/thanhtoan")
 public class ThanhToanLichKhamController {
     @Autowired
     LichKhamService lichKhamService;

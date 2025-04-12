@@ -1,5 +1,6 @@
 package com.example.quanlybenhvien.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,17 +69,14 @@ public class LichKhamService {
     }
 
     // Cập nhật lịch khám khi bác sĩ xác nhận hoặc hủy
-    public void xacNhanLichKhamTheoBacSi(int maLichKham, String trangThai, String ghiChu, BacSi bacSi) {
-        Optional<LichKham> optional = lichKhamDao.findById(maLichKham);
-        if (optional.isPresent()) {
-            LichKham lichKham = optional.get();
-            lichKham.setTrangThai(trangThai);
-            lichKham.setGhiChu(ghiChu);
-            lichKham.setBacSi(bacSi);
-            lichKhamDao.save(lichKham);
-        } else {
-            throw new RuntimeException("Không tìm thấy lịch khám với mã: " + maLichKham);
-        }
+    public LichKham xacNhanLichKhamTheoBacSi(int maLichKham, String trangThai, String ghiChu, BacSi bacSi) {
+        LichKham lichKham = lichKhamDao.findById(maLichKham)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy lịch khám với mã: " + maLichKham));
+
+        lichKham.setTrangThai(trangThai);
+        lichKham.setGhiChu(ghiChu);
+        lichKham.setBacSi(bacSi);
+        return lichKhamDao.save(lichKham);
     }
 
     // Lấy danh sách lịch khám đã xác nhận bởi bác sĩ (chưa có cập nhật khác)

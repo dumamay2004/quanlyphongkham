@@ -80,6 +80,7 @@
                     <th scope="col">📅 Ngày khám</th>
                     <th scope="col">📝 Ghi chú</th>
                     <th scope="col">📌 Trạng thái</th>
+                    <th scope="col">📌 Thanh toán</th>
                 </tr>
             </thead>
             <tbody>
@@ -90,6 +91,13 @@
                     <td th:text="${lich.ghiChu}">Không rõ lý do</td>
                     <td>
                         <span class="badge bg-success" th:text="${lich.trangThai}">Đã hoàn thành</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-secondary btn-sm mb-1"
+                  th:href="@{'/bacsi/trangchu/thanhtoan?maLichKham=' + ${lich.maLichKham}}"
+                  onclick="return confirm('Đến trang chi tiết dịch vụ?');">
+                  ✅ Tiến hành thanh toán
+                </a>
                     </td>
                 </tr>
             </tbody>
