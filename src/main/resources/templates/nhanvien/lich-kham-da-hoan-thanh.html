@@ -76,6 +76,7 @@
             <thead class="table-primary">
                 <tr>
                     <th scope="col">#</th>
+                    <th scope="col">Mã lịch khám</th>
                     <th scope="col">👤 Bệnh nhân</th>
                     <th scope="col">📅 Ngày khám</th>
                     <th scope="col">📝 Ghi chú</th>
@@ -86,6 +87,7 @@
             <tbody>
                 <tr th:each="lich, iterStat : ${lichKhams}">
                     <td th:text="${iterStat.index + 1}">1</td>
+                    <td th:text="${lich.maLichKham}">Nguyễn Văn A</td>
                     <td th:text="${lich.benhNhan.hoTen}">Nguyễn Văn A</td>
                     <td th:text="${lich.ngayKham}">10/04/2025</td>
                     <td th:text="${lich.ghiChu}">Không rõ lý do</td>
@@ -93,9 +95,9 @@
                         <span class="badge bg-success" th:text="${lich.trangThai}">Đã hoàn thành</span>
                     </td>
                     <td>
-                        <a class="btn btn-secondary btn-sm mb-1"
-                  th:href="@{'/bacsi/trangchu/thanhtoan?maLichKham=' + ${lich.maLichKham}}"
-                  onclick="return confirm('Đến trang chi tiết dịch vụ?');">
+                        <a class="btn btn-primary btn-sm mb-1"
+                        th:href="@{'/nhanvien/trangchu/thanhtoan?id=' + ${lich.maLichKham}}"
+                        onclick="return confirm('Đến trang chi tiết dịch vụ?');">
                   ✅ Tiến hành thanh toán
                 </a>
                     </td>
