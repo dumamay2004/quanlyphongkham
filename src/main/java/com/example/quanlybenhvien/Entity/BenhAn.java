@@ -29,10 +29,6 @@ public class BenhAn {
     private String tenBenhAn;
 
     @ManyToOne
-    @JoinColumn(name = "ma_benh_nhan")
-    private BenhNhan benhNhan;
-
-    @ManyToOne
     @JoinColumn(name = "ma_lich_kham")
     private LichKham lichKham;
 

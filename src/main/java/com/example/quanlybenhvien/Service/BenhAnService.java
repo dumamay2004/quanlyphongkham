@@ -38,9 +38,9 @@ public class BenhAnService {
         return benhAnDao.existsById(id);
     }
 
-    public List<BenhAn> getBenhAnByMaBenhNhan(Integer maBenhNhan) {
-        return benhAnDao.findByBenhNhan_MaBenhNhan(maBenhNhan);
-    }
+    // public List<BenhAn> getBenhAnByMaBenhNhan(Integer maBenhNhan) {
+    //     return benhAnDao.findByBenhNhan_MaBenhNhan(maBenhNhan);
+    // }
 
     // Thêm bệnh án cho lịch khám
     public BenhAn themBenhAnChoLichKham(Integer maLichKham, String tenBenhAn, String trieuChung, String dieuTri,
@@ -53,7 +53,6 @@ public class BenhAnService {
             // Tạo đối tượng BenhAn mới
             BenhAn benhAn = new BenhAn();
             benhAn.setTenBenhAn(tenBenhAn);
-            benhAn.setBenhNhan(lichKham.getBenhNhan()); // Lấy thông tin bệnh nhân từ lịch khám
             benhAn.setBacSi(lichKham.getBacSi()); // Lấy thông tin bác sĩ từ lịch khám
             benhAn.setNgayKham(java.sql.Date.valueOf(lichKham.getNgayKham())); // Ngày khám từ lịch khám
             benhAn.setTrieuChung(trieuChung);

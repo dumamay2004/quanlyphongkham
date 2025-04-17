@@ -11,10 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.quanlybenhvien.Entity.BenhAn;
-import com.example.quanlybenhvien.Entity.BenhNhan;
 import com.example.quanlybenhvien.Entity.LichKham;
 import com.example.quanlybenhvien.Service.BenhAnService;
-import com.example.quanlybenhvien.Service.BenhNhanService;
 import com.example.quanlybenhvien.Service.LichKhamService;
 
 @Controller
@@ -26,9 +24,6 @@ public class BenhAnController {
 
     @Autowired
     private LichKhamService lichKhamService;
-
-    @Autowired
-    private BenhNhanService benhNhanService;
 
     @GetMapping()
     public String hienThilichKham(Model model) {
@@ -56,32 +51,28 @@ public class BenhAnController {
             model.addAttribute("lichKham", lichKham);
         }
 
-        model.addAttribute("benhAn", new BenhAn()); // Thêm bệnh án mới
-        model.addAttribute("isEdit", false); // Form ở trạng thái thêm mới
+        model.addAttribute("benhAn", new BenhAn());
+        model.addAttribute("isEdit", false);
         return "bacsi/thembenhan";
     }
 
-    // Lưu bệnh án mới hoặc cập nhật bệnh án
+    // Lưu bệnh án mới
     @PostMapping("/save")
     public String saveBenhAn(@RequestParam("lichKhamId") Integer lichKhamId,
-            @RequestParam("benhNhanId") Integer benhNhanId,
-            @RequestParam("trieuChung") String trieuChung,
-            @RequestParam("dieuTri") String dieuTri,
-            @RequestParam("ghiChu") String ghiChu,
-            @RequestParam("tenBenhAn") String tenBenhAn,
-            Model model) {
+                             @RequestParam("trieuChung") String trieuChung,
+                             @RequestParam("dieuTri") String dieuTri,
+                             @RequestParam("ghiChu") String ghiChu,
+                             @RequestParam("tenBenhAn") String tenBenhAn,
+                             Model model) {
 
         Optional<LichKham> lichKhamOpt = lichKhamService.findById(lichKhamId);
-        Optional<BenhNhan> benhNhanOpt = benhNhanService.findByIdOptional(benhNhanId);
 
-        if (lichKhamOpt.isPresent() && benhNhanOpt.isPresent()) {
+        if (lichKhamOpt.isPresent()) {
             LichKham lichKham = lichKhamOpt.get();
-            BenhNhan benhNhan = benhNhanOpt.get();
 
             if (lichKham.getBacSi() != null) {
                 BenhAn benhAn = new BenhAn();
                 benhAn.setLichKham(lichKham);
-                benhAn.setBenhNhan(benhNhan);
                 benhAn.setTrieuChung(trieuChung);
                 benhAn.setDieuTri(dieuTri);
                 benhAn.setGhiChu(ghiChu);
@@ -95,7 +86,7 @@ public class BenhAnController {
                 return "bacsi/thembenhan";
             }
         } else {
-            model.addAttribute("error", "Không tìm thấy thông tin lịch khám hoặc bệnh nhân.");
+            model.addAttribute("error", "Không tìm thấy thông tin lịch khám.");
             return "bacsi/thembenhan";
         }
 
@@ -105,14 +96,13 @@ public class BenhAnController {
     // Cập nhật bệnh án
     @PostMapping("/update/{benhAnId}")
     public String updateBenhAn(@PathVariable("benhAnId") Integer benhAnId,
-            @ModelAttribute("benhAn") BenhAn benhAn, Model model) {
+                               @ModelAttribute("benhAn") BenhAn benhAn, Model model) {
 
         Optional<BenhAn> benhAnOpt = benhAnService.getBenhAnById(benhAnId);
 
         if (benhAnOpt.isPresent()) {
             BenhAn existingBenhAn = benhAnOpt.get();
 
-            // Cập nhật các trường dữ liệu
             existingBenhAn.setTenBenhAn(benhAn.getTenBenhAn());
             existingBenhAn.setTrieuChung(benhAn.getTrieuChung());
             existingBenhAn.setDieuTri(benhAn.getDieuTri());
@@ -136,12 +126,11 @@ public class BenhAnController {
             BenhAn benhAn = benhAnOpt.get();
             model.addAttribute("benhAn", benhAn);
             model.addAttribute("lichKham", benhAn.getLichKham());
-            model.addAttribute("isEdit", true); // Đặt isEdit thành true khi chỉnh sửa
+            model.addAttribute("isEdit", true);
             return "bacsi/thembenhan";
         } else {
             model.addAttribute("error", "Không tìm thấy bệnh án.");
             return "bacsi/benhan";
         }
     }
-
-}
+} 

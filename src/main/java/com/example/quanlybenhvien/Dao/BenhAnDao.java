@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface BenhAnDao extends JpaRepository<BenhAn, Integer> {
-    List<BenhAn> findByBenhNhan_MaBenhNhan(Integer maBenhNhan); // Tìm bệnh án theo mã bệnh nhân
+    // List<BenhAn> findByBenhNhan_MaBenhNhan(Integer maBenhNhan); // Tìm bệnh án theo mã bệnh nhân
 }
 
