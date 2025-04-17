@@ -96,6 +96,7 @@ CREATE TABLE DICHVU (
     gia DECIMAL(10,2) NOT NULL
 );
 
+select * from LICHKHAM
 -- Tạo bảng lịch khám
 CREATE TABLE LICHKHAM (
     ma_lich_kham int identity(1,1) PRIMARY KEY,
@@ -114,6 +115,22 @@ CREATE TABLE LICHKHAM (
 );
 
 select * from LICHKHAM
+
+SELECT COLUMN_NAME 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'BENHAN';
+
+
+ALTER TABLE BENHAN
+ADD ma_lich_kham INT NOT NULL;
+
+-- Sau đó thêm ràng buộc khóa ngoại:
+ALTER TABLE BENHAN
+ADD CONSTRAINT FK_BENHAN_LICHKHAM
+FOREIGN KEY (ma_lich_kham) REFERENCES LICHKHAM(ma_lich_kham);
+
+select * from BENHAN
+delete from BENHAN
 -- Tạo bảng bệnh án
 CREATE TABLE BENHAN (
     ma_benh_an int identity(1,1) PRIMARY KEY,

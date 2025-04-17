@@ -33,6 +33,10 @@ public class BenhAn {
     private BenhNhan benhNhan;
 
     @ManyToOne
+    @JoinColumn(name = "ma_lich_kham")
+    private LichKham lichKham;
+
+    @ManyToOne
     @JoinColumn(name = "ma_bac_si")
     private BacSi bacSi;
 
